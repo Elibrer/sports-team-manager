@@ -62,6 +62,23 @@ PLAYER TABLE
     }
 ]
 
+//Maybe?
+ROLE TABLE
+[
+    {
+        "id": 1,
+        "name": "Admin"
+    },
+    {
+        "id": 2,
+        "name": "Team"
+    },
+    {
+        "id": 3,
+        "name": "Player"
+    }
+]
+
 
 
 
