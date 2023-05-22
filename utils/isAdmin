@@ -1,0 +1,10 @@
+const isAdmin = (req, res, next) => {
+  if (!user.is_admin) {
+    res.redirect('/players');
+  }
+  else {
+    next();
+  }
+};
+
+module.exports = isAdmin;
