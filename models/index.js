@@ -8,7 +8,7 @@ Player.hasOne(Position, {
 });
 
 Position.belongsTo(Player, {
-    foreignKey: 'player_id',
+    foreignKey: 'user_id',
 });
 
 User.hasMany(Player, {
