@@ -1,6 +1,6 @@
 const isAdmin = (req, res, next) => {
   if (!user.is_admin) {
-    res.redirect('/players');
+    res.redirect('/manage');
   }
   else {
     next();
