@@ -1,8 +1,8 @@
 [
   {
-    "username": "Sal",
-    "email": "sal@hotmail.com",
-    "password": "password12345",
+    "username": "admin",
+    "email": "admin@admin.com",
+    "password": "admin12345",
     "is_admin": true
   },
   {
