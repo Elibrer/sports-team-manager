@@ -2,13 +2,9 @@ const User = require('./User');
 const Position = require('./Position');
 const Player = require('./Player');
 
-Player.hasOne(Position, {
-    foreignKey: 'player_id',
+Position.hasOne(Player, {
+    foreignKey: 'position_id',
     onDelete: 'CASCADE',
-});
-
-Position.belongsTo(Player, {
-    foreignKey: 'player_id',
 });
 
 User.hasMany(Player, {

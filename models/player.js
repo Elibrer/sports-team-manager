@@ -53,6 +53,13 @@ Player.init(
         key: 'id',
       },
     },
+    position_id: {
+      type: DataTypes.INTEGER,
+      references: {
+        model: 'position',
+        key: 'id',
+      },
+    },
   },
   {
     sequelize,
