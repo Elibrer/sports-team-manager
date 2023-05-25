@@ -15,13 +15,6 @@ Position.init(
       type: DataTypes.STRING,
       allowNull: false,
     },
-    player_id: {
-      type: DataTypes.INTEGER,
-      references: {
-        model: 'player',
-        key: 'id',
-      },
-    },
   },
   {
     sequelize,
