@@ -26,7 +26,7 @@ const playerData = [
     player_scores: 14,
     player_fouls: 3,
     position_id: 1,
-    team_id: 1
+    team_id: 2
   },
   {
     first_name: "Kylian",
@@ -35,7 +35,7 @@ const playerData = [
     player_scores: 21,
     player_fouls: 1,
     position_id: 1,
-    team_id: 1
+    team_id: 2
   },
   {
     first_name: "Kevin",
@@ -44,7 +44,7 @@ const playerData = [
     player_scores: 12,
     player_fouls: 2,
     position_id: 1,
-    team_id: 1
+    team_id: 3
   },
   {
     first_name: "Robert",
@@ -53,7 +53,7 @@ const playerData = [
     player_scores: 20,
     player_fouls: 3,
     position_id: 1,
-    team_id: 1
+    team_id: 3
   },
   {
     first_name: "Mohamed",
@@ -62,7 +62,7 @@ const playerData = [
     player_scores: 15,
     player_fouls: 2,
     position_id: 1,
-    team_id: 1
+    team_id: 4
   },
   {
     first_name: "Sergio",
@@ -71,7 +71,7 @@ const playerData = [
     player_scores: 7,
     player_fouls: 6,
     position_id: 1,
-    team_id: 1
+    team_id: 4
   },
   {
     first_name: "Manuel",
@@ -80,7 +80,7 @@ const playerData = [
     player_scores: 0,
     player_fouls: 0,
     position_id: 1,
-    team_id: 1
+    team_id: 2
   },
   {
     first_name: "Antoine",
@@ -89,7 +89,7 @@ const playerData = [
     player_scores: 10,
     player_fouls: 2,
     position_id: 1,
-    team_id: 1
+    team_id: 3
   },
   {
     first_name: "Gareth",
@@ -107,7 +107,7 @@ const playerData = [
     player_scores: 6,
     player_fouls: 1,
     position_id: 1,
-    team_id: 1
+    team_id: 3
   },
   {
     first_name: "Harry",
@@ -116,7 +116,7 @@ const playerData = [
     player_scores: 14,
     player_fouls: 2,
     position_id: 1,
-    team_id: 1
+    team_id: 3
   }
 ];
 

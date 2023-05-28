@@ -1,11 +1,5 @@
 [
-  {
-    "username": "admin",
-    "email": "admin@admin.com",
-    "password": "admin12345",
-    "is_admin": true
-  },
-  {
+    {
     "username": "West Sydney",
     "email": "westsydney@stm.com",
     "password": "westsyd123",
@@ -28,5 +22,11 @@
     "email": "miranda@stm.com",
     "password": "miranda123",
     "is_admin": false
+  },
+  {
+    "username": "admin",
+    "email": "admin@admin.com",
+    "password": "admin12345",
+    "is_admin": true
   }
 ]

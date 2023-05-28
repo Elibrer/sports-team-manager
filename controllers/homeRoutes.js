@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const { User } = require('../models');
+const { User, Player } = require('../models');
 const auth = require('../utils/auth');
 
 router.get('/', auth, async (req, res) => {
@@ -10,10 +10,26 @@ router.get('/', auth, async (req, res) => {
       order: [['username', 'ASC']],
     });
 
-    const users = userData.map((project) => project.get({ plain: true }));
+    if (is_admin) {
+      const playerData = await Player.findAll({
+        order: [['first_name', 'ASC']],
+      });
+    }
+    else {
+    const playerData = await Player.findAll({
+      where: { team_id: req.session.team_id }, // Filter players by user_id
+      order: [['first_name', 'ASC']],
+    });
+  }
 
+    const players = playerData.map((player) => player.get({ plain: true }));
+
+    const users = userData.map((project) => project.get({ plain: true }));
+ 
     res.render('manage', {
       users,
+      team_name: req.session.team_name,
+      players,
       logged_in: req.session.logged_in,
       is_admin: req.session.is_admin,
     });

@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const { User } = require('../../models');
+const { User, Team } = require('../../models');
 
 // Get all users
 router.get('/', async (req, res) => {
@@ -83,6 +83,7 @@ router.delete('/:id', async (req, res) => {
   }
 });
 
+//Login
 router.post('/login', async (req, res) => {
   try {
     const dbUserData = await User.findOne({
@@ -90,6 +91,16 @@ router.post('/login', async (req, res) => {
         email: req.body.email,
       },
     });
+
+    const team = await Team.findOne({
+      where: {
+        id: dbUserData.id,
+      },
+    });
+
+    console.log(team.id)
+
+    console.log(dbUserData)
 
     if (!dbUserData) {
       res
@@ -99,7 +110,6 @@ router.post('/login', async (req, res) => {
     }
 
     const validPassword = await dbUserData.checkPassword(req.body.password);
-
     if (!validPassword) {
       res
         .status(400)
@@ -109,6 +119,8 @@ router.post('/login', async (req, res) => {
 
   req.session.save(() => {
     req.session.logged_in = true;
+    req.session.team_name = team.team_name;
+    req.session.team_id = team.id;
     if (dbUserData.is_admin === true) {
       req.session.is_admin = true;
     } else {

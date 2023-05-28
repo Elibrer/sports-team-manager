@@ -1,5 +1,5 @@
 <div class="mt-1 text-center bg-dark">
-      <a class="text-light p-3">Player Management </a>
+      <a class="text-light p-3">Player Management for {{team_name}}</a>
       <div class="icons">
         <i class="fas fa-save text-light save-player"></i>
         <i class="fas fa-plus text-light new-player"></i>
@@ -7,9 +7,20 @@
     </div>
     <div class="container-fluid">
       <div class="row">
-
         <div class="col-4 list-container">
           <div class="card">
+             {{#each players as |player|}}
+        <div>
+          <h3>{{player.first_name}} {{player.last_name}}</h3>
+          <p>Number: {{player.number}}</p>
+          <p>Scores: {{player.scores}}</p>
+          <p>Fouls: {{player.fouls}}</p>
+          <div class="icons">
+            <i class="fas fa-edit edit-player" data-id="{{player.id}}"></i>
+            <i class="fas fa-trash-alt delete-player" data-id="{{player.id}}"></i>
+          </div>
+        </div>
+        {{/each}}
             <ul class="list-group"></ul>
           </div>
         </div>
@@ -42,4 +53,3 @@
         </div>
       </div>
     </div>
-    <script src="/js/manage.js"></script>
