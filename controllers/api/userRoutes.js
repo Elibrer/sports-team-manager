@@ -2,7 +2,7 @@ const router = require('express').Router();
 const { User } = require('../../models');
 
 // Get all users
-router.get('/users', async (req, res) => {
+router.get('/', async (req, res) => {
   try {
     const users = await User.findAll();
     res.status(200).json(users);
@@ -12,7 +12,7 @@ router.get('/users', async (req, res) => {
 });
 
 // Get a single user by ID
-router.get('/users/:id', async (req, res) => {
+router.get('/:id', async (req, res) => {
   try {
     const user = await User.findByPk(req.params.id);
     if (!user) {
@@ -25,7 +25,7 @@ router.get('/users/:id', async (req, res) => {
 });
 
 // Create a new user
-router.post('/users', async (req, res) => {
+router.post('/', async (req, res) => {
   try {
     const newUser = await User.create({
       username: req.body.username,
@@ -39,7 +39,7 @@ router.post('/users', async (req, res) => {
 });
 
 // Update an existing user by ID
-router.put('/users/:id', async (req, res) => {
+router.put('/:id', async (req, res) => {
   try {
     const updatedUser = await User.update({
       username: req.body.username,
@@ -53,16 +53,16 @@ router.put('/users/:id', async (req, res) => {
       });
     if (!updatedUser[0]) {
       res.status(404).json({ message: 'User not found' });
-    } else {
-      res.status(200).json({ message: 'User updated successfully' });
     }
+    res.status(200).json({ message: 'User updated successfully' });
+
   } catch (err) {
     res.status(500).json(err);
   }
 });
 
 // Delete a user by ID
-router.delete('/users/:id', async (req, res) => {
+router.delete('/:id', async (req, res) => {
   try {
     const deletedUser = await User.destroy({
       where: {
@@ -71,9 +71,9 @@ router.delete('/users/:id', async (req, res) => {
     });
     if (!deletedUser) {
       res.status(404).json({ message: 'User not found' });
-    } 
-      res.status(200).json({ message: 'User deleted successfully' });
-    
+    }
+    res.status(200).json({ message: 'User deleted successfully' });
+
   } catch (err) {
     res.status(500).json(err);
   }

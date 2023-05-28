@@ -2,7 +2,7 @@ const router = require('express').Router();
 const { Player } = require('../../models/');
 
 // Get all players
-router.get('/players', async (req, res) => {
+router.get('/', async (req, res) => {
     try {
         const players = await Player.findAll();
         res.status(200).json(players);
@@ -12,7 +12,7 @@ router.get('/players', async (req, res) => {
 });
 
 // Get a single player by ID
-router.get('/players/:id', async (req, res) => {
+router.get('/:id', async (req, res) => {
     try {
         const player = await Player.findByPk(req.params.id);
         if (!player) {
@@ -26,7 +26,7 @@ router.get('/players/:id', async (req, res) => {
 });
 
 // Create a new player
-router.post('/players', async (req, res) => {
+router.post('/', async (req, res) => {
     try {
         const newPlayer = await Player.create({
             first_name: req.body.first_name,
@@ -42,7 +42,7 @@ router.post('/players', async (req, res) => {
 });
 
 // Update an existing player by ID
-router.put('/players/:id', async (req, res) => {
+router.put('/:id', async (req, res) => {
     try {
         const updatedPlayer = await Player.update({
             first_name: req.body.first_name,
@@ -67,7 +67,7 @@ router.put('/players/:id', async (req, res) => {
 });
 
 // Delete a player by ID
-router.delete('/players/:id', async (req, res) => {
+router.delete('/:id', async (req, res) => {
     try {
         const deletedPlayer = await Player.destroy({
             where: {
