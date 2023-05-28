@@ -21,5 +21,47 @@
           />
           <textarea class="note-textarea" placeholder="Note Text"></textarea>
         </div>
+  {{#each teams as |team|}}
+    <div>
+      <h3 class = "team">{{team.team_name}}</h3>
+      {{#each team.players as |player|}}
+        <p>{{player.first_name}} {{player.last_name}}</p>
+      {{/each}}
+    </div>
+  {{/each}}
+
+<div>
+  <canvas id="myChart"></canvas>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+  const ctx = document.getElementById('myChart');
+  const teamData = document.querySelectorAll(".team")
+  console.log(teamData)
+  console.log(teamData[0].outerText)
+  const team1 = teamData[0].outerText
+  new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: [teamData[0].outerText, teamData[1].outerText, teamData[2].outerText, teamData[3].outerText, teamData[4].outerText,],
+      datasets: [{
+        label: '# of Goals',
+        data: [10, 19, 3, 5, 2, 3],
+        borderWidth: 1
+      }]
+    },
+    options: {
+      scales: {
+        y: {
+          beginAtZero: true
+        }
+      }
+      //chart.options.transitions.active.animation.duration = 400;
+    }
+  });
+</script>
+
+
       </div>
     </div>

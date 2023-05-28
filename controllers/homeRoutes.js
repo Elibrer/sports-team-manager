@@ -1,25 +1,25 @@
 const router = require('express').Router();
-const { User } = require('../models');
+const { Team, Player, Position } = require('../models');
 const auth = require('../utils/auth');
 
 router.get('/', auth, async (req, res) => {
   try {
-    if (req.session.logged_in) {
-    const userData = await User.findAll({
-      attributes: { exclude: ['password'] },
-      order: [['username', 'ASC']],
-    });
 
-    const users = userData.map((project) => project.get({ plain: true }));
-    
+    const teamData = await Team.findAll({
+      include: [{model: Player, include: Position}]
+      //attributes: { exclude: ['password'] },
+      //order: [['username', 'ASC']],
+    });
+    const teams = teamData.map((project) => project.get({ plain: true }));
+    console.log({
+      teams,
+      logged_in: req.session.logged_in,
+    })
+    for(const team of teams) console.log(team)
     res.render('manage', {
-      users,
+      teams,
       logged_in: req.session.logged_in,
     });
-  }
-  else {
-    res.redirect('/login');
-  }
   } catch (err) {
     res.status(500).json(err);
   }
