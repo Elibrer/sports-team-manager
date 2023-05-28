@@ -32,10 +32,6 @@ const hide = (elem) => {
 // activeplayer is used to keep track of the player in the textarea
 let activePlayer = {};
 
-const egg = function () {
-  console.log("Egg");
-}
-
 const getPlayers = () =>
   fetch('/api/players', {
     method: 'GET',
@@ -196,5 +192,3 @@ if (window.location.pathname === '/') {
 }
 
 getAndRenderPlayers();
-
-egg();

@@ -21,6 +21,7 @@ Position.init(
     timestamps: false,
     underscored: true,
     modelName: 'position',
+    tableName: 'position',
     }
 );
 
