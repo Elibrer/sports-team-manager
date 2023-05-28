@@ -1,43 +1,107 @@
 const router = require('express').Router();
-
 const { User } = require('../../models');
 
+// Get all users
 router.get('/', async (req, res) => {
   try {
-    const userData = await User.findAll({
-      attributes: { exclude: ['password'] },
-      order: [['username', 'ASC']],
-    });
-    res.status(200).json(userData);
+    const users = await User.findAll();
+    res.status(200).json(users);
   } catch (err) {
     res.status(500).json(err);
   }
 });
 
+// Get a single user by ID
+router.get('/:id', async (req, res) => {
+  try {
+    const user = await User.findByPk(req.params.id);
+    if (!user) {
+      res.status(404).json({ message: 'User not found' });
+    }
+    res.status(200).json(user);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
 
-router.post('/login', async (req, res) => {
-    try {
-      const dbUserData = await User.findOne({
+// Create a new user
+router.post('/', async (req, res) => {
+  try {
+    const newUser = await User.create({
+      username: req.body.username,
+      email: req.body.email,
+      password: req.body.password,
+    });
+    res.status(201).json(newUser);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
+
+// Update an existing user by ID
+router.put('/:id', async (req, res) => {
+  try {
+    const updatedUser = await User.update({
+      username: req.body.username,
+      email: req.body.email,
+      password: req.body.password,
+    },
+      {
         where: {
-          email: req.body.email,
+          id: req.params.id,
         },
       });
-  
-      if (!dbUserData) {
-        res
-          .status(400)
-          .json({ message: 'Incorrect email or password. Please try again!' });
-        return;
-      }
-  
-      const validPassword = await dbUserData.checkPassword(req.body.password);
-  
-      if (!validPassword) {
-        res
-          .status(400)
-          .json({ message: 'Incorrect email or password. Please try again!' });
-        return;
-      }
+    if (!updatedUser[0]) {
+      res.status(404).json({ message: 'User not found' });
+    }
+    res.status(200).json({ message: 'User updated successfully' });
+
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
+
+// Delete a user by ID
+router.delete('/:id', async (req, res) => {
+  try {
+    const deletedUser = await User.destroy({
+      where: {
+        id: req.params.id,
+      },
+    });
+    if (!deletedUser) {
+      res.status(404).json({ message: 'User not found' });
+    }
+    res.status(200).json({ message: 'User deleted successfully' });
+
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
+
+    router.post('/login', async (req, res) => {
+      try {
+        const dbUserData = await User.findOne({
+          where: {
+            email: req.body.email,
+          },
+        });
+
+        if (!dbUserData) {
+          res
+            .status(400)
+            .json({ message: 'Incorrect email or password. Please try again!' });
+          return;
+        }
+
+        const validPassword = await dbUserData.checkPassword(req.body.password);
+
+        if (!validPassword) {
+          res
+            .status(400)
+            .json({ message: 'Incorrect email or password. Please try again!' });
+          return;
+        }
   
       req.session.save(() => {
         req.session.logged_in = true;
@@ -60,6 +124,7 @@ router.post('/login', async (req, res) => {
       res.status(500).json(err);
     }
   });
+
 
 router.post('/logout', (req, res) => {
   if (req.session.logged_in) {
