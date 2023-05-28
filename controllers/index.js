@@ -7,7 +7,7 @@ router.use('/api', apiRoutes);
 router.use('/', homeRoutes);  
 
 router.use((req, res) => {
-  res.status(404).render()
+  res.status(404).render('404')
 });
 
 module.exports = router;

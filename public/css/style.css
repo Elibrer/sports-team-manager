@@ -1,39 +1,50 @@
 @import url('https://fonts.googleapis.com/css?family=Nunito+Sans');
 :root {
-  --blue: #0e0620;
+  --blue: #19243c;
   --white: #fff;
   --green: #2ccf6d;
 }
-html,
-body {
+
+html, body {
   height: 100%;
 }
+
 body {
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: center;
   font-family:"Nunito Sans";
   color: var(--blue);
   font-size: 1em;
 }
+
 button {
   font-family:"Nunito Sans";
 }
+
 ul {
   list-style-type: none;
   padding-inline-start: 35px;
 }
+
 svg {
   width: 100%;
   visibility: hidden;
 }
-h1 {
-  font-size: 7.5em;
+
+.h1, h1 {
+  font-size: 50em;
   margin: 15px 0px;
   font-weight:bold;
 }
+
+
 h2 {
   font-weight:bold;
+}
+
+footer {
+  margin-top: auto;
 }
 
 .btn {

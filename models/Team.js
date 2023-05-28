@@ -1,9 +1,9 @@
 const { Model, DataTypes } = require('sequelize');
 const sequelize = require('../config/connection');
 
-class Position extends Model { }
+class Team extends Model { }
 
-Position.init(
+Team.init(
   {
     id: {
       type: DataTypes.INTEGER,
@@ -11,17 +11,25 @@ Position.init(
       primaryKey: true,
       autoIncrement: true,
     },
-    position_name: {
+    team_name: {
       type: DataTypes.STRING,
       allowNull: false,
+    },
+    user_id: {
+      type: DataTypes.INTEGER,
+      references: {
+        model: 'user',
+        key: 'id',
+      },
     },
   },
   {
     sequelize,
     timestamps: false,
     underscored: true,
-    modelName: 'position',
-    }
+    modelName: 'team',
+    tableName: 'team',
+  }
 );
 
-module.exports = Position;
+module.exports = Team;

@@ -79,26 +79,6 @@ router.delete('/:id', async (req, res) => {
   }
 });
 
-router.post('/login', async (req, res) => {
-  try {
-    const userData = await User.findOne({ where: { email: req.body.email } });
-
-    if (!userData) {
-      res
-        .status(400)
-        .json({ message: 'Incorrect email or password, please try again' });
-      return;
-    }
-
-    const validPassword = await userData.checkPassword(req.body.password);
-
-    if (!validPassword) {
-      res
-        .status(400)
-        .json({ message: 'Incorrect email or password, please try again' });
-      return;
-    }
-
     router.post('/login', async (req, res) => {
       try {
         const dbUserData = await User.findOne({
@@ -122,30 +102,29 @@ router.post('/login', async (req, res) => {
             .json({ message: 'Incorrect email or password. Please try again!' });
           return;
         }
+  
+      req.session.save(() => {
+        req.session.logged_in = true;
+        if (dbUserData.is_admin === true) {
+          req.session.is_admin = true;
+        } else {
+          req.session.is_admin = false;
+        }
+        console.log(
+          '🚀 ~ file: user-routes.js ~ line 57 ~ req.session.save ~ req.session.cookie',
+          req.session.cookie
+        );
+  
+        res
+          .status(200)
+          .json({ user: dbUserData, message: 'You are now logged in!' });
+      });
+    } catch (err) {
+      console.log(err);
+      res.status(500).json(err);
+    }
+  });
 
-        req.session.save(() => {
-          req.session.logged_in = true;
-          console.log(
-            '🚀 ~ file: user-routes.js ~ line 57 ~ req.session.save ~ req.session.cookie',
-            req.session.cookie
-          );
-
-          res
-            .status(200)
-            .json({ user: dbUserData, message: 'You are now logged in!' });
-        });
-      } catch (err) {
-        console.log(err);
-        res.status(500).json(err);
-      }
-    });
-
-
-
-  } catch (err) {
-    res.status(400).json(err);
-  }
-});
 
 router.post('/logout', (req, res) => {
   if (req.session.logged_in) {
