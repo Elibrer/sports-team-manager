@@ -1,25 +1,45 @@
-<nav class="navbar bg-info">
-      <a class="navbar-brand text-light p-3" href="/">Note Taker </a>
+<div class="mt-1 text-center bg-dark">
+      <a class="text-light p-3">Player Management </a>
       <div class="icons">
-        <i class="fas fa-save text-light save-note"></i>
-        <i class="fas fa-plus text-light new-note"></i>
+        <i class="fas fa-save text-light save-player"></i>
+        <i class="fas fa-plus text-light new-player"></i>
       </div>
-    </nav>
+    </div>
     <div class="container-fluid">
       <div class="row">
+
         <div class="col-4 list-container">
           <div class="card">
             <ul class="list-group"></ul>
           </div>
         </div>
+
         <div class="col-8">
-          <input
-            class="note-title"
-            placeholder="Note Title"
-            maxlength="28"
-            type="text"
-          />
-          <textarea class="note-textarea" placeholder="Note Text"></textarea>
+          <div>
+            <label for="player-first-name">Player first name:</label>
+            <input class="player-first-name" maxlength="28" type="text" id="player-first-name"/>
+          </div>
+          
+          <div>
+            <label for="player-last-name">Player last name:</label>
+            <input class="player-last-name" maxlength="28" type="text" id="player-last-name"/>
+          </div>
+
+          <div>
+            <label for="player-number">Player number:</label>
+            <input class="player-number" maxlength="28" type="text" id="player-number"/>
+          </div>
+
+          <div>
+            <label for="player-scores">No. of scores:</label>
+            <input class="player-scores" maxlength="100" type="number" id="player-scores"/>
+          </div>
+
+          <div>
+            <label for="player-fouls">Player fouls:</label>
+            <input class="player-fouls" maxlength="20" type="text" id="player-fouls"/>
+          </div>
         </div>
       </div>
     </div>
+    <script src="/js/manage.js"></script>

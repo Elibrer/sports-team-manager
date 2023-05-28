@@ -2,6 +2,18 @@ const router = require('express').Router();
 
 const { User } = require('../../models');
 
+router.get('/', async (req, res) => {
+  try {
+    const userData = await User.findAll({
+      attributes: { exclude: ['password'] },
+      order: [['username', 'ASC']],
+    });
+    res.status(200).json(userData);
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
+
 
 router.post('/login', async (req, res) => {
     try {
@@ -29,6 +41,11 @@ router.post('/login', async (req, res) => {
   
       req.session.save(() => {
         req.session.logged_in = true;
+        if (dbUserData.is_admin === true) {
+          req.session.is_admin = true;
+        } else {
+          req.session.is_admin = false;
+        }
         console.log(
           '🚀 ~ file: user-routes.js ~ line 57 ~ req.session.save ~ req.session.cookie',
           req.session.cookie
