@@ -11,10 +11,11 @@ router.get('/', auth, async (req, res) => {
     });
 
     const users = userData.map((project) => project.get({ plain: true }));
-    
+
     res.render('manage', {
       users,
       logged_in: req.session.logged_in,
+      is_admin: req.session.is_admin,
     });
   }
   else {

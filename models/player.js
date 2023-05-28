@@ -46,13 +46,6 @@ Player.init(
       type: DataTypes.INTEGER,
       allowNull: true,
     },
-    user_id: {
-      type: DataTypes.INTEGER,
-      references: {
-        model: 'user',
-        key: 'id',
-      },
-    },
     position_id: {
       type: DataTypes.INTEGER,
       references: {
@@ -60,6 +53,13 @@ Player.init(
         key: 'id',
       },
     },
+    team_id: {
+      type: DataTypes.INTEGER,
+      references: {
+        model: 'team',
+        key: 'id',
+      },
+    }
   },
   {
     sequelize,

@@ -1,19 +1,38 @@
 const User = require('./User');
 const Position = require('./Position');
 const Player = require('./Player');
+const Team = require('./Team')
 
-Position.hasOne(Player, {
+Position.hasMany(Player, {
     foreignKey: 'position_id',
-    onDelete: 'CASCADE',
 });
 
-User.hasMany(Player, {
+Team.hasMany(Player, {
+    foreignKey: 'team_id',
+});
+
+Team.belongsTo(User, {
     foreignKey: 'user_id',
-    onDelete: 'CASCADE',
+    onDelete: 'SET NULL',
 });
 
-Player.belongsTo(User, {
+User.hasOne(Team, {
     foreignKey: 'user_id',
-});
+})
 
-module.exports = { User, Position, Player };
+Player.belongsTo(Team, {
+    foreignKey: 'team_id',
+    onDelete: 'CASCADE',
+})
+
+Player.belongsTo(Position, {
+    foreignKey: 'position_id',
+    onDelete: 'SET NULL',
+})
+
+Team.hasMany(Player,{
+    foreignKey: 'team_id',
+    onDelete: 'CASCADE'
+})
+
+module.exports = { User, Position, Player, Team };
