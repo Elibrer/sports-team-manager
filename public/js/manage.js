@@ -32,10 +32,6 @@ const hide = (elem) => {
 // activeplayer is used to keep track of the player in the textarea
 let activePlayer = {};
 
-const egg = function () {
-  console.log("Egg");
-}
-
 const getPlayers = () =>
   fetch('/api/players', {
     method: 'GET',
@@ -63,7 +59,7 @@ const deletePlayer = (id) =>
 
 const renderActivePlayer = () => {
     hide(savePlayerBtn);
-  
+    
     if (activePlayer.id) {
         playerFirstName.setAttribute('readonly', true);
         playerLastName.setAttribute('readonly', true);
@@ -109,12 +105,15 @@ const handlePlayerDelete = (e) => {
     e.stopPropagation();
   
     const player = e.target;
+    console.log (player)
+    const egg = JSON.parse(player.parentElement.getAttribute('data-player'))
+    console.log(egg)
     const playerId = JSON.parse(player.parentElement.getAttribute('data-player')).id;
-  
+
     if (activePlayer.id === playerId) {
       activePlayer = {};
     }
-  
+
     deletePlayer(playerId).then(() => {
       getAndRenderPlayers();
       renderActivePlayer();
@@ -132,9 +131,18 @@ const handleNewPlayerView = (e) => {
     renderActivePlayer();
 };
 
+const handleRenderSaveBtn = () => {
+    if (!playerTitle.value.trim() || !playerText.value.trim()) {
+      hide(savePlayerBtn);
+    } else {
+      show(savePlayerBtn);
+    }
+  };
 
 const renderPlayerList = async (players) => {
+    console.log(players)
     let jsonPlayers = await players.json();
+    console.log(jsonPlayers)
     if (window.location.pathname === '/') {
       playerList.forEach((el) => (el.innerHTML = ''));
     }
@@ -174,7 +182,7 @@ const renderPlayerList = async (players) => {
     }
   
     jsonPlayers.forEach((players) => {
-      const li = createLi(players.title);
+      const li = createLi(players.first_name + " " + players.last_name);
       li.dataset.players = JSON.stringify(players);
   
       playerListItems.push(li);
@@ -196,5 +204,3 @@ if (window.location.pathname === '/') {
 }
 
 getAndRenderPlayers();
-
-egg();

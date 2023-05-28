@@ -24,10 +24,6 @@ const seedDatabase = async () => {
   await seedPlayer();
   console.log('\n----- PLAYERS SEEDED -----\n');
 
-
-
- 
-
   process.exit(0);
 };
 
