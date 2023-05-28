@@ -22,6 +22,7 @@ Position.init(
     underscored: true,
     modelName: 'position',
     tableName: 'position',
+
     }
 );
 

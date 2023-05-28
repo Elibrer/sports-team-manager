@@ -5,7 +5,9 @@ const { User, Team } = require('../../models');
 router.get('/', async (req, res) => {
   try {
     const users = await User.findAll({
+
       attributes: { exclude: ['password'] },
+
     });
     res.status(200).json(users);
   } catch (err) {
@@ -19,6 +21,7 @@ router.get('/:id', async (req, res) => {
     const user = await User.findByPk(req.params.id, {
       attributes: { exclude: ['password'] },
     });
+
     if (!user) {
       res.status(404).json({ message: 'User not found' });
     }
@@ -140,7 +143,6 @@ router.post('/login', async (req, res) => {
     res.status(500).json(err);
   }
 });
-
 
 router.post('/logout', (req, res) => {
   if (req.session.logged_in) {
