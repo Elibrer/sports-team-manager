@@ -28,11 +28,11 @@ Player.belongsTo(Team, {
 Player.belongsTo(Position, {
     foreignKey: 'position_id',
     onDelete: 'SET NULL',
-    //when the position gets deleted the players position id will be null
 })
-// Team.hasMany(Player,{
-//     foreignKey: 'team_id',
-//     onDelete: 'CASCADE',
-// })
+
+Team.hasMany(Player,{
+    foreignKey: 'team_id',
+    onDelete: 'CASCADE'
+})
 
 module.exports = { User, Position, Player, Team };
