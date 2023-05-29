@@ -18,30 +18,39 @@
 <body>
   <header class="d-flex p-2 border-bottom border-dark">
     <div class="d-flex flex-column">
-    <h1 style="font-size: 4em; color: rgb(25, 36, 60);">
-      Sports Team Manager
-    </h1>
-    {{#if logged_in}}
-    <nav class=" d-flex justify-content-end">
-      {{#if is_admin}}
-          <a href="/admin" class="btn btn-secondary">Admin</a>
+      <h1 style="font-size: 4em; color: rgb(25, 36, 60);">
+        Sports Team Manager
+      </h1>
+      {{#if logged_in}}
+      <nav class=" d-flex justify-content-end">
+        {{#if is_admin}}
+        <a href="/admin" class="btn btn-secondary">Admin</a>
+        {{/if}}
+        <button class="btn btn-danger" id="logout">Logout</button>
+      </nav>
       {{/if}}
-      <button class="btn btn-danger" id="logout">Logout</button>
-    </nav>
-    {{/if}}
     </div>
   </header>
+
+  <div class="content-video">
+
+    <video class="video" poster="/immagine.jpg" autoplay loop muted>
+      <source src="/video/Project-2-video.mp4" type="video/mp4">
+    </video>
+
+  </div><!--/content-video-->
+
   <main class="">
-    
-      {{{ body }}}
- 
+
+    {{{ body }}}
+
   </main>
   <footer class="text-center">
     <p>
       &copy; 2023 Sports Team Manager
     </p>
     <h6 style="font-style:italic;">Jasmine Neal, Simone Monari, Philip Christov, Elijah Brereton</h6>
-      
+
   </footer>
 
   {{#if logged_in}}
