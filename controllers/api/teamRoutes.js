@@ -27,4 +27,24 @@ router.get('/:name', async (req, res) => {
     }
 });
 
+router.put('/:id', async (req, res) => {
+    try {
+      const updatedTeam = await Team.update(
+        {
+          team_name: req.body.team_name,
+          user_id: req.body.user_id,
+        },
+        {
+          where: {
+            id: req.params.id,
+          },
+        }
+      );
+      res.status(200).json(updatedTeam);
+    } catch (err) {
+      res.status(500).json(err);
+    }
+});
+
+
   module.exports = router;
