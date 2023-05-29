@@ -1,10 +1,12 @@
 const router = require('express').Router();
-const { Player, Position } = require('../../models/');
+const { Player, Position, Team } = require('../../models/');
 
 // Get all players
 router.get('/', async (req, res) => {
     try {
-        const players = await Player.findAll();
+        const players = await Player.findAll({
+            include: [{ model: Team, attributes: ['team_name']}],
+        });
         res.status(200).json(players);
     } catch (err) {
         res.status(500).json(err);
@@ -50,18 +52,22 @@ router.post('/', async (req, res) => {
 // Update an existing player by ID
 router.put('/:id', async (req, res) => {
     try {
+        console.log(req.params.id)
+        console.log(req.body)
         const updatedPlayer = await Player.update({
             first_name: req.body.first_name,
             last_name: req.body.last_name,
             player_number: req.body.player_number,
-            scores: req.body.scores,
-            fouls: req.body.fouls,
+            player_scores: req.body.player_scores,
+            player_fouls: req.body.player_fouls,
+            position_id: req.body.position_id,
+            team_id: req.body.team_id,
         },
-            {
-                where: {
-                    id: req.params.id,
-                },
-            });
+        {
+            where: {
+                id: req.params.id,
+            },
+        });
         if (!updatedPlayer[0]) {
             res.status(404).json({ message: 'Player not found' });
         }
@@ -84,7 +90,7 @@ router.delete('/:id', async (req, res) => {
             res.status(404).json({ message: 'Player not found' });
         }
         res.status(200).json({ message: 'Player deleted successfully' });
-
+        return res;
     } catch (err) {
         res.status(500).json(err);
     }

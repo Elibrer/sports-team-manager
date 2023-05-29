@@ -1,16 +1,20 @@
-
 let playerFirstName;
 let playerLastName;
 let playerNumber;
 let playerScores;
 let playerFouls;
 let savePlayerBtn;
+let editPlayerButton;
 let newPlayerBtn;
 let playerList;
 let deleteBtn;
 let viewBtn;
 let playerPosition;
-let teamName;
+let teamNameEl;
+let playerTeam;
+let isAdminEl;
+let newPlayerMode = true;
+
 
 if (window.location.pathname === '/') {
   playerFirstName = document.querySelector('.player-first-name');
@@ -19,17 +23,18 @@ if (window.location.pathname === '/') {
   playerScores = document.querySelector('.player-scores');
   playerFouls = document.querySelector('.player-fouls');
   playerPosition = document.querySelector('#player-position');
+  playerTeam = document.querySelector('#player-team');
+  isAdminEl = document.querySelector('#is-admin');
 
+
+  editPlayerButton = document.querySelector('.edit-player');
   savePlayerBtn = document.querySelector('.save-player');
   newPlayerBtn = document.querySelector('.new-player');
   playerList = document.querySelectorAll('.list-container .list-group');
   deleteBtn = document.querySelectorAll('.delete-player');
   viewBtn = document.querySelectorAll('.view-player');
-  teamName = document.querySelector('#team-name');
-
- 
+  teamNameEl = document.querySelector('#team-name');
 }
-
 
 
 // Show an element
@@ -42,7 +47,6 @@ const hide = (elem) => {
   elem.style.display = 'none';
 };
 
-// activeplayer is used to keep track of the player in the textarea
 let activePlayer = {};
 
 const getPlayers = () =>
@@ -53,18 +57,31 @@ const getPlayers = () =>
     }
 });
 
-const savePlayer = async (player) => {
-  
-  let name = teamName.innerHTML;
-  const teamId = await fetch(`/api/teams/${name}`, {
-    method: 'GET',
-    headers: {
-      'Content-Type': 'application/json',
-    },
+const editPlayer = async (playerId, updatePlayer) => {
+  console.log(updatePlayer)
+  await fetch(`/api/players/${playerId}`, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(updatePlayer),
   });
-  let team_id = await teamId.json();
+};
 
-  player.team_id = team_id.id
+const savePlayer = async (player) => {
+  console.log(player)
+  if(!isAdmin()) {
+    let name =  teamNameEl.innerHTML;
+    const team = await fetch(`/api/teams/${name}`, {
+      method: 'GET',
+      headers: { 'Content-Type': 'application/json' },
+    });
+    const teamId = await team.json();
+    player.team_id = parseInt(teamId.id);
+  } else {
+    player.team_id = teamNameEl.value;
+  }
+
+  console.log(player)
+
 
   await fetch('/api/players', {
     method: 'POST',
@@ -76,120 +93,148 @@ const savePlayer = async (player) => {
   renderPlayerList();
 };
 
-
-const deletePlayer = (id) =>
-  fetch(`/api/players/${id}`, {
+const deletePlayer = (id) => {
+  return fetch(`/api/players/${id}`, {
     method: 'DELETE',
     headers: {
       'Content-Type': 'application/json',
     },
-});
+  });
+};
 
 const renderActivePlayer = async (playerId) => {
+   
     hide(savePlayerBtn);
+   
     if (playerId) {
-        playerFirstName.setAttribute('readonly', true);
-        playerLastName.setAttribute('readonly', true);
-        playerNumber.setAttribute('readonly', true);
-        playerScores.setAttribute('readonly', true);
-        playerFouls.setAttribute('readonly', true);
-        playerPosition.setAttribute('disabled', true);
         const playerData = await fetch(`/api/players/${playerId}`, {
         method: 'GET',
         headers: { 'Content-Type': 'application/json' },
       });
       const player = await playerData.json();
       activePlayer = player;
+      console.log(activePlayer.team_id)
 
-      let positionName = '';
+      let positionId = '';
       switch (activePlayer.position_id) {
         case 1:
-          positionName = "Attacker"
+          positionId = "1"
           break;
         case 2:
-          positionName = "Defender"
+          positionId = "2"
           break;
-          default:
-            positionName = "Goalkeeper"
-      }      
-
-
-      console.log(activePlayer)
-        playerFirstName.value = activePlayer.first_name;
-        playerLastName.value = activePlayer.last_name;
-        playerNumber.value = activePlayer.player_number;
-        playerScores.value = activePlayer.player_scores;
-        playerFouls.value = activePlayer.player_fouls;
-        playerPosition.value = positionName;
-      } else {
-        playerFirstName.removeAttribute('readonly');
-        playerLastName.removeAttribute('readonly');
-        playerNumber.removeAttribute('readonly');
-        playerScores.removeAttribute('readonly');
-        playerFouls.removeAttribute('readonly');
-        playerPosition.removeAttribute('disabled');
-        playerFirstName.value = '';
-        playerLastName.value = '';
-        playerNumber.value = '';
-        playerScores.value = '';
-        playerFouls.value = '';
-        playerPosition.value = 'Attacker';
+      } 
+      
+      playerFirstName.value = activePlayer.first_name;
+      playerLastName.value = activePlayer.last_name;
+      playerNumber.value = parseInt(activePlayer.player_number);
+      playerScores.value = parseInt(activePlayer.player_scores);
+      playerFouls.value = parseInt(activePlayer.player_fouls);
+      playerPosition.value = parseInt(positionId);
+      if (isAdmin()) {
+        playerTeam.value = parseInt(activePlayer.team_id);
+      }
+    } else {
+      playerFirstName.removeAttribute('readonly');
+      playerLastName.removeAttribute('readonly');
+      playerNumber.removeAttribute('readonly');
+      playerScores.removeAttribute('readonly');
+      playerFouls.removeAttribute('readonly');
+      playerPosition.removeAttribute('disabled');
+      playerFirstName.value = '';
+      playerLastName.value = '';
+      playerNumber.value = '';
+      playerScores.value = '';
+      playerFouls.value = '';
+      playerPosition.value = '1';
     }
   };
+const handlePlayerEdit = async () => {
+  let playerId = activePlayer.id;
+  let teamId;
+  
+  console.log(isAdmin())
+  if(isAdmin()) {
+  
+    teamId = playerTeam.value;
+  } else {
+    let name =  teamNameEl.innerHTML;
+    const team = await fetch(`/api/teams/${name}`, {
+      method: 'GET',
+      headers: { 'Content-Type': 'application/json' },
+    });
+    teamId = await team.json();
+    teamId = parseInt(teamId.id);  
+  }
+
+
+
+  const updatePlayer = {
+    first_name: playerFirstName.value,
+    last_name: playerLastName.value,
+    player_number: parseInt(playerNumber.value),
+    player_scores: parseInt(playerScores.value),
+    player_fouls: parseInt(playerFouls.value),
+    position_id: parseInt(playerPosition.value),
+    team_id: parseInt(teamId),
+  };
+
+  await editPlayer(playerId, updatePlayer);
+  location.reload();
+}
 
 const handlePlayerSave = async () => {
-    const positionName = playerPosition.value;
-    const position = await fetch(`/api/positions/${positionName}`, {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
-      let position_id = await position.json();
-      const positionId = position_id.id;
-
     const newPlayer = {
         first_name: playerFirstName.value,
         last_name: playerLastName.value,
-        player_number: playerNumber.value,
-        player_scores: playerScores.value,
-        player_fouls: playerFouls.value,
-        position_id: positionId,
-    };
+        player_number: parseInt(playerNumber.value),
+        player_scores: parseInt(playerScores.value),
+        player_fouls: parseInt(playerFouls.value),
+        position_id: parseInt(playerPosition.value),
+      };
+    console.log(newPlayer)
     
     await savePlayer(newPlayer);
-    const playerList = await getPlayers();
-    renderPlayerList(playerList);
-    renderActivePlayer();
     location.reload();
   };
 
-const handlePlayerDelete = (e) => {
-    // Prevents the click listener for the list from being called when the button inside of it is clicked
+const handlePlayerDelete = async (e, playerId) => {
     e.stopPropagation();
     console.log("DELETE!")
-
-    const player = e.target;
-    const playerId = JSON.parse(player.parentElement.getAttribute('data-delete')).id;
-    console.log(playerId);
     if (activePlayer.id === playerId) {
       activePlayer = {};
     }
+    modal.style.display = "block";
 
-    deletePlayer(playerId).then(() => {
-      getAndRenderPlayers();
-      renderActivePlayer();
-    });
+    modalBtn.addEventListener('click', async () => {
+      modal.style.display = "none";
+      try {
+        const delResponse = await deletePlayer(playerId);
+        if (delResponse.ok) {
+          console.log("DELETED!!!!!!!!")
+          getAndRenderPlayers();
+          renderActivePlayer();
+          location.reload();
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    });       
 };
 
 const handlePlayerView = async (e, playerId) => {
+    newPlayerMode = false;
+    saveMode = true;
+    show(editPlayerButton)
     e.preventDefault();
     console.log("VIEW!")
-    console.log(playerId);
     renderActivePlayer(playerId);
 };
 
 const handleNewPlayerView = (e) => {
+    newPlayerMode = true;
+    svaeMode = false;
+    hide(editPlayerButton);
     activePlayer = {};
     renderActivePlayer();
 };
@@ -198,34 +243,44 @@ const handleRenderSaveBtn = () => {
     if (!playerFirstName.value.trim() || !playerLastName.value.trim() || !playerNumber.value.trim() || !playerScores.value.trim() || !playerFouls.value.trim()) {
       hide(savePlayerBtn);
     } else {
+      if (newPlayerMode === true) {
       show(savePlayerBtn);
+      } else {
+        hide(savePlayerBtn);
+      }
     }
-  };
+};
 
-const renderPlayerList = async (playerList) => {
+const renderPlayerList = async () => {
   
-    const editButtons = document.querySelectorAll('.edit-player');
-    editButtons.forEach((button) => {
+    const viewButtons = document.querySelectorAll('.view-player');
+    viewButtons.forEach((button) => {
 
-      const playerId = button.getAttribute('data-edit');
+      const playerId = button.getAttribute('data-view');
       button.addEventListener('click', (e) => handlePlayerView(e, playerId));
     });
 
     const deleteButtons = document.querySelectorAll('.delete-player');
     deleteButtons.forEach((button) => {
+      const playerId = button.getAttribute('data-delete');
 
-      button.addEventListener('click', handlePlayerDelete);
+      button.addEventListener('click', (e) => handlePlayerDelete(e, playerId));
     });
 };
 
 
 const getAndRenderPlayers = async () => {
-  handleRenderSaveBtn();
-  await getPlayers();
+  hide(editPlayerButton)
+  if (!saveMode) {
+    handleRenderSaveBtn();
+  }
+  getPlayers();
   await renderPlayerList();
 }
 
+
 if (window.location.pathname === '/') {
+    editPlayerButton.addEventListener('click', handlePlayerEdit);
     savePlayerBtn.addEventListener('click', handlePlayerSave);
     newPlayerBtn.addEventListener('click', handleNewPlayerView);
     playerFirstName.addEventListener('keyup', handleRenderSaveBtn);
@@ -235,4 +290,36 @@ if (window.location.pathname === '/') {
     playerFouls.addEventListener('keyup', handleRenderSaveBtn);
 }
 
+const modalBtn = document.getElementById("modal-close");
+const modalCancel = document.getElementById("modal-cancel");
+
+var span = document.getElementsByClassName("close")[0];
+
+var modal = document.querySelector("#myModal");
+if (modal !== null) {
+  modal.style.display = "none";
+}
+modalCancel.onclick = function() {
+  modal.style.display = "none";
+  location.reload();
+}
+span.onclick = function() {
+  modal.style.display = "none";
+  location.reload();
+}
+
+const isAdmin = () => {
+  let is_admin = isAdminEl.innerHTML;
+
+  if (is_admin === 'true') {
+    is_admin = true;
+  } else {
+    is_admin = false;
+  } 
+
+  console.log("Admin: " + is_admin)
+  return is_admin;
+}
+
+let saveMode = true;
 getAndRenderPlayers();

@@ -1,38 +1,45 @@
 const router = require('express').Router();
-const { User, Player } = require('../models');
+const { User, Player, Team } = require('../models');
 const auth = require('../utils/auth');
 
 router.get('/', auth, async (req, res) => {
   try {
+
     if (req.session.logged_in) {
     const userData = await User.findAll({
       attributes: { exclude: ['password'] },
       order: [['username', 'ASC']],
     });
 
-    let playerData = [];
+    const teamData = await Team.findAll();
 
+    let playerData = [];
     if (req.session.is_admin) {
       playerData = await Player.findAll({
-        order: [['first_name', 'ASC']],
+        include: {
+            model: Team,
+            attributes: ['team_name'], 
+        },   
+        order: [['player_number', 'ASC']],
       });
     } else {
-      console.log(req.session.team_id)
       playerData = await Player.findAll({
         where: { team_id: req.session.team_id },
-        order: [['first_name', 'ASC']],
+        order: [['player_number', 'ASC']],
       });
     }
+
     const players = playerData.map((project) => project.get({ plain: true }));
     const users = userData.map((project) => project.get({ plain: true }));
-    players.sort((a, b) => a.player_number - b.player_number);
-    console.log(players)
+    const teams = teamData.map((project) => project.get({ plain: true }));
+    // module.exports = is_admin;
     res.render('manage', {
       users,
+      players,
+      teams,
       team_name: req.session.team_name,
       logged_in: req.session.logged_in,
       is_admin: req.session.is_admin,
-      players,
     });
   }
   else {
