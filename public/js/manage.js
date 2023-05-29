@@ -55,7 +55,7 @@ const getPlayers = () =>
     headers: {
       'Content-Type': 'application/json',
     }
-});
+  });
 
 const editPlayer = async (playerId, updatePlayer) => {
   console.log(updatePlayer)
@@ -68,9 +68,6 @@ const editPlayer = async (playerId, updatePlayer) => {
 
 const savePlayer = async (newPlayer) => {
   console.log(newPlayer)
- 
-
-
   await fetch('/api/players', {
     method: 'POST',
     headers: {
@@ -91,68 +88,68 @@ const deletePlayer = (id) => {
 };
 
 const renderActivePlayer = async (playerId) => {
-   
-    hide(savePlayerBtn);
-   
-    if (playerId) {
-        const playerData = await fetch(`/api/players/${playerId}`, {
-        method: 'GET',
-        headers: { 'Content-Type': 'application/json' },
-      });
-      const player = await playerData.json();
-      activePlayer = player;
-      console.log(activePlayer.team_id)
 
-      let positionId = '';
-      switch (activePlayer.position_id) {
-        case 1:
-          positionId = "1"
-          break;
-        case 2:
-          positionId = "2"
-          break;
-      } 
-      
-      playerFirstName.value = activePlayer.first_name;
-      playerLastName.value = activePlayer.last_name;
-      playerNumber.value = parseInt(activePlayer.player_number);
-      playerScores.value = parseInt(activePlayer.player_scores);
-      playerFouls.value = parseInt(activePlayer.player_fouls);
-      playerPosition.value = parseInt(positionId);
-      if (isAdmin()) {
-        playerTeam.value = parseInt(activePlayer.team_id);
-      }
-    } else {
-      playerFirstName.removeAttribute('readonly');
-      playerLastName.removeAttribute('readonly');
-      playerNumber.removeAttribute('readonly');
-      playerScores.removeAttribute('readonly');
-      playerFouls.removeAttribute('readonly');
-      playerPosition.removeAttribute('disabled');
-      playerFirstName.value = '';
-      playerLastName.value = '';
-      playerNumber.value = '';
-      playerScores.value = '';
-      playerFouls.value = '';
-      playerPosition.value = '1';
+  hide(savePlayerBtn);
+
+  if (playerId) {
+    const playerData = await fetch(`/api/players/${playerId}`, {
+      method: 'GET',
+      headers: { 'Content-Type': 'application/json' },
+    });
+    const player = await playerData.json();
+    activePlayer = player;
+    console.log(activePlayer.team_id)
+
+    let positionId = '';
+    switch (activePlayer.position_id) {
+      case 1:
+        positionId = "1"
+        break;
+      case 2:
+        positionId = "2"
+        break;
     }
-  };
+
+    playerFirstName.value = activePlayer.first_name;
+    playerLastName.value = activePlayer.last_name;
+    playerNumber.value = parseInt(activePlayer.player_number);
+    playerScores.value = parseInt(activePlayer.player_scores);
+    playerFouls.value = parseInt(activePlayer.player_fouls);
+    playerPosition.value = parseInt(positionId);
+    if (isAdmin()) {
+      playerTeam.value = parseInt(activePlayer.team_id);
+    }
+  } else {
+    playerFirstName.removeAttribute('readonly');
+    playerLastName.removeAttribute('readonly');
+    playerNumber.removeAttribute('readonly');
+    playerScores.removeAttribute('readonly');
+    playerFouls.removeAttribute('readonly');
+    playerPosition.removeAttribute('disabled');
+    playerFirstName.value = '';
+    playerLastName.value = '';
+    playerNumber.value = '';
+    playerScores.value = '';
+    playerFouls.value = '';
+    playerPosition.value = '1';
+  }
+};
 const handlePlayerEdit = async () => {
   let playerId = activePlayer.id;
   let teamId;
-  
+
   console.log(isAdmin())
-  if(isAdmin()) {
-  
+  if (isAdmin()) {
+
     teamId = playerTeam.value;
   } else {
-    let name =  teamNameEl.innerHTML;
+    let name = teamNameEl.innerHTML;
     const team = await fetch(`/api/teams/${name}`, {
       method: 'GET',
       headers: { 'Content-Type': 'application/json' },
     });
     teamId = await team.json();
-    teamId = parseInt(teamId.id);  
+    teamId = parseInt(teamId.id);
   }
 
 
@@ -196,77 +193,76 @@ const handlePlayerSave = async () => {
 
     await savePlayer(newPlayer);
     location.reload();
-
 };
 
 const handlePlayerDelete = async (e, playerId) => {
-    e.stopPropagation();
-    console.log("DELETE!")
-    if (activePlayer.id === playerId) {
-      activePlayer = {};
-    }
-    modal.style.display = "block";
+  e.stopPropagation();
+  console.log("DELETE!")
+  if (activePlayer.id === playerId) {
+    activePlayer = {};
+  }
+  modal.style.display = "block";
 
-    modalBtn.addEventListener('click', async () => {
-      modal.style.display = "none";
-      try {
-        const delResponse = await deletePlayer(playerId);
-        if (delResponse.ok) {
-          console.log("DELETED!!!!!!!!")
-          getAndRenderPlayers();
-          renderActivePlayer();
-          location.reload();
-        }
-      } catch (error) {
-        console.log(error);
+  modalBtn.addEventListener('click', async () => {
+    modal.style.display = "none";
+    try {
+      const delResponse = await deletePlayer(playerId);
+      if (delResponse.ok) {
+        console.log("DELETED!!!!!!!!")
+        getAndRenderPlayers();
+        renderActivePlayer();
+        location.reload();
       }
-    });       
+    } catch (error) {
+      console.log(error);
+    }
+  });
 };
 
 const handlePlayerView = async (e, playerId) => {
-    newPlayerMode = false;
-    saveMode = true;
-    show(editPlayerButton)
-    e.preventDefault();
-    console.log("VIEW!")
-    renderActivePlayer(playerId);
+  newPlayerMode = false;
+  saveMode = true;
+  show(editPlayerButton)
+  e.preventDefault();
+  console.log("VIEW!")
+  renderActivePlayer(playerId);
 };
 
 const handleNewPlayerView = (e) => {
-    newPlayerMode = true;
-    svaeMode = false;
-    hide(editPlayerButton);
-    activePlayer = {};
-    renderActivePlayer();
+  newPlayerMode = true;
+  svaeMode = false;
+  hide(editPlayerButton);
+  activePlayer = {};
+  renderActivePlayer();
 };
 
 const handleRenderSaveBtn = () => {
-    if (!playerFirstName.value.trim() || !playerLastName.value.trim() || !playerNumber.value.trim() || !playerScores.value.trim() || !playerFouls.value.trim()) {
-      hide(savePlayerBtn);
-    } else {
-      if (newPlayerMode === true) {
+  if (!playerFirstName.value.trim() || !playerLastName.value.trim() || !playerNumber.value.trim() || !playerScores.value.trim() || !playerFouls.value.trim()) {
+    hide(savePlayerBtn);
+  } else {
+    if (newPlayerMode === true) {
       show(savePlayerBtn);
-      } else {
-        hide(savePlayerBtn);
-      }
+    } else {
+      hide(savePlayerBtn);
     }
+  }
 };
 
 const renderPlayerList = async () => {
-  
-    const viewButtons = document.querySelectorAll('.view-player');
-    viewButtons.forEach((button) => {
 
-      const playerId = button.getAttribute('data-view');
-      button.addEventListener('click', (e) => handlePlayerView(e, playerId));
-    });
+  const viewButtons = document.querySelectorAll('.view-player');
+  viewButtons.forEach((button) => {
 
-    const deleteButtons = document.querySelectorAll('.delete-player');
-    deleteButtons.forEach((button) => {
-      const playerId = button.getAttribute('data-delete');
+    const playerId = button.getAttribute('data-view');
+    button.addEventListener('click', (e) => handlePlayerView(e, playerId));
+  });
 
-      button.addEventListener('click', (e) => handlePlayerDelete(e, playerId));
-    });
+  const deleteButtons = document.querySelectorAll('.delete-player');
+  deleteButtons.forEach((button) => {
+    const playerId = button.getAttribute('data-delete');
+
+    button.addEventListener('click', (e) => handlePlayerDelete(e, playerId));
+  });
 };
 
 
@@ -282,14 +278,14 @@ const getAndRenderPlayers = async () => {
 
 
 if (window.location.pathname === '/') {
-    editPlayerButton.addEventListener('click', handlePlayerEdit);
-    savePlayerBtn.addEventListener('click', handlePlayerSave);
-    newPlayerBtn.addEventListener('click', handleNewPlayerView);
-    playerFirstName.addEventListener('keyup', handleRenderSaveBtn);
-    playerLastName.addEventListener('keyup', handleRenderSaveBtn);
-    playerNumber.addEventListener('keyup', handleRenderSaveBtn);
-    playerScores.addEventListener('keyup', handleRenderSaveBtn);
-    playerFouls.addEventListener('keyup', handleRenderSaveBtn);
+  editPlayerButton.addEventListener('click', handlePlayerEdit);
+  savePlayerBtn.addEventListener('click', handlePlayerSave);
+  newPlayerBtn.addEventListener('click', handleNewPlayerView);
+  playerFirstName.addEventListener('keyup', handleRenderSaveBtn);
+  playerLastName.addEventListener('keyup', handleRenderSaveBtn);
+  playerNumber.addEventListener('keyup', handleRenderSaveBtn);
+  playerScores.addEventListener('keyup', handleRenderSaveBtn);
+  playerFouls.addEventListener('keyup', handleRenderSaveBtn);
 }
 
 const modalBtn = document.getElementById("modal-close");
@@ -301,26 +297,13 @@ var modal = document.querySelector("#myModal");
 if (modal !== null) {
   modal.style.display = "none";
 }
-modalCancel.onclick = function() {
+modalCancel.onclick = function () {
   modal.style.display = "none";
   location.reload();
 }
-span.onclick = function() {
+span.onclick = function () {
   modal.style.display = "none";
   location.reload();
-}
-
-const isAdmin = () => {
-  let is_admin = isAdminEl.innerHTML;
-
-  if (is_admin === 'true') {
-    is_admin = true;
-  } else {
-    is_admin = false;
-  } 
-
-  console.log("Admin: " + is_admin)
-  return is_admin;
 }
 
 let saveMode = true;
