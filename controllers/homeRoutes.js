@@ -2,6 +2,7 @@ const router = require('express').Router();
 const { User, Player } = require('../models');
 const auth = require('../utils/auth');
 
+
 router.get('/', auth, async (req, res) => {
   try {
     if (req.session.logged_in) {
@@ -34,6 +35,7 @@ router.get('/', auth, async (req, res) => {
       is_admin: req.session.is_admin,
       players,
     });
+
   }
   else {
     res.redirect('/login');
