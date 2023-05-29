@@ -1,5 +1,5 @@
 const router = require('express').Router();
-const { Player } = require('../../models/');
+const { Player, Position } = require('../../models/');
 
 // Get all players
 router.get('/', async (req, res) => {
@@ -14,7 +14,11 @@ router.get('/', async (req, res) => {
 // Get a single player by ID
 router.get('/:id', async (req, res) => {
     try {
-        const player = await Player.findByPk(req.params.id);
+        const player = await Player.findOne({
+            where: { 
+                id : req.params.id,
+            },
+        });
         if (!player) {
             res.status(404).json({ message: 'Player not found' });
         }
@@ -32,8 +36,10 @@ router.post('/', async (req, res) => {
             first_name: req.body.first_name,
             last_name: req.body.last_name,
             player_number: req.body.player_number,
-            scores: req.body.scores,
-            fouls: req.body.fouls,
+            player_scores: req.body.player_scores,
+            player_fouls: req.body.player_fouls,
+            position_id: req.body.position_id,
+            team_id: req.body.team_id,
         });
         res.status(201).json(newPlayer);
     } catch (err) {

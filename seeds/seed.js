@@ -3,16 +3,12 @@ const { User } = require('../models');
 const seedPlayer = require('./playerData')
 const seedTeam = require('./teamData')
 const seedPosition = require('./positionData')
-
-const userData = require('./userData.json');
+const seedUser = require('./userData');
 
 const seedDatabase = async () => {
   await sequelize.sync({ force: true });
   
-  await User.bulkCreate(userData, {
-    individualHooks: true,
-    returning: true,
-  });
+  await seedUser();
   console.log('\n----- USERS SEEDED -----\n');
 
   await seedPosition();

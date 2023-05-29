@@ -5,9 +5,7 @@ const { User, Team } = require('../../models');
 router.get('/', async (req, res) => {
   try {
     const users = await User.findAll({
-
-      attributes: { exclude: ['password'] },
-
+      // attributes: { exclude: ['password'] },
     });
     res.status(200).json(users);
   } catch (err) {
@@ -86,12 +84,12 @@ router.delete('/:id', async (req, res) => {
   }
 });
 
-//Login
+// Login
 router.post('/login', async (req, res) => {
   try {
     const dbUserData = await User.findOne({
       where: {
-        email: req.body.email,
+        email: req.body.email
       },
     });
 
@@ -101,10 +99,6 @@ router.post('/login', async (req, res) => {
       },
     });
 
-    console.log(team.id)
-
-    console.log(dbUserData)
-
     if (!dbUserData) {
       res
         .status(400)
@@ -112,7 +106,8 @@ router.post('/login', async (req, res) => {
       return;
     }
 
-    const validPassword = await dbUserData.checkPassword(req.body.password);
+    const validPassword = dbUserData.checkPassword(req.body.password);
+
     if (!validPassword) {
       res
         .status(400)
@@ -124,6 +119,7 @@ router.post('/login', async (req, res) => {
     req.session.logged_in = true;
     req.session.team_name = team.team_name;
     req.session.team_id = team.id;
+
     if (dbUserData.is_admin === true) {
       req.session.is_admin = true;
     } else {
