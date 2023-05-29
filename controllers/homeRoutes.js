@@ -1,7 +1,7 @@
 const router = require('express').Router();
 const { User, Player, Team } = require('../models');
 const auth = require('../utils/auth');
-
+const { Op } = require('sequelize');
 
 router.get('/', auth, async (req, res) => {
   try {
@@ -33,7 +33,7 @@ router.get('/', auth, async (req, res) => {
     const players = playerData.map((project) => project.get({ plain: true }));
     const users = userData.map((project) => project.get({ plain: true }));
     const teams = teamData.map((project) => project.get({ plain: true }));
-    // module.exports = is_admin;
+    console.log(teams)
     res.render('manage', {
       users,
       players,
@@ -53,16 +53,31 @@ router.get('/', auth, async (req, res) => {
 });
 
 router.get('/admin', async (req, res) => {
+  if (!req.session.logged_in) {
+    res.render('login');
+    return;
+  }
   try {
     const userData = await User.findAll({
       order: [['username', 'ASC']],
+      where: {
+        email: {
+          [Op.not]: 'admin@admin.com'
+        }
+      },
+      include: {
+        model: Team,
+        attributes: ['team_name'],
+      },
     });
+    const users = userData.map((project) => project.get({ plain: true }));
 
     const teamData = await Team.findAll();
-
+    const teams = teamData.map((project) => project.get({ plain: true }));
+    console.log(users)
     res.render('admin', {
-      userData,
-      teamData,
+      users,
+      teams,
       logged_in: req.session.logged_in,
       is_admin: req.session.is_admin,
     });
@@ -74,12 +89,12 @@ router.get('/admin', async (req, res) => {
 
 
 
+
 router.get('/login', (req, res) => {
   if (req.session.logged_in) {
     res.redirect('/');
     return;
   }
-
   res.render('login');
 });
 

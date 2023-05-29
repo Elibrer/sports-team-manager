@@ -1,8 +1,11 @@
-let username;
-let email;
-let password;
-let admin;
-let teamName;
+// document.addEventListener('DOMContentLoaded', function() {
+
+let idEl;
+let usernameEl;
+let emailEl;
+let passwordEl;
+let adminEl;
+let teamNameEl;
 
 
 
@@ -14,26 +17,22 @@ let deleteBtn;
 let viewBtn;
 
 
-if (window.location.pathname === '/') {
-  playerFirstName = document.querySelector('.player-first-name');
-  playerLastName = document.querySelector('.player-last-name');
-  playerNumber = document.querySelector('.player-number');
-  playerScores = document.querySelector('.player-scores');
-  playerFouls = document.querySelector('.player-fouls');
-  playerPosition = document.querySelector('#player-position');
-  playerTeam = document.querySelector('#player-team');
-  isAdminEl = document.querySelector('#is-admin');
+if (window.location.pathname === '/admin') {
+  idEl = document.querySelector('.id-el');
+  usernameEl = document.querySelector('.username-el');
+  emailEl = document.querySelector('.email-el');
+  passwordEl = document.querySelector('.password-el');
+  adminEl = document.querySelector('.admin-el');
+  teamNameEl = document.querySelector('.team-name-el');
 
 
-  editPlayerButton = document.querySelector('.edit-player');
-  savePlayerBtn = document.querySelector('.save-player');
-  newPlayerBtn = document.querySelector('.new-player');
-  playerList = document.querySelectorAll('.list-container .list-group');
-  deleteBtn = document.querySelectorAll('.delete-player');
-  viewBtn = document.querySelectorAll('.view-player');
-  teamNameEl = document.querySelector('#team-name');
+  editUserButton = document.querySelector('.edit-user');
+  saveUserBtn = document.querySelector('.save-user');
+  newUserBtn = document.querySelector('.new-user');
+  userList = document.querySelectorAll('.list-container .list-group');
+  deleteBtn = document.querySelectorAll('.delete-user');
+  viewBtn = document.querySelectorAll('.view-user');
 }
-
 
 // Show an element
 const show = (elem) => {
@@ -45,54 +44,60 @@ const hide = (elem) => {
   elem.style.display = 'none';
 };
 
-let activePlayer = {};
+let activeUser = {};
 
-const getPlayers = () =>
-  fetch('/api/players', {
+const getUsers = () =>
+  fetch('/api/users', {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
     }
 });
 
-const editPlayer = async (playerId, updatePlayer) => {
-  console.log(updatePlayer)
-  await fetch(`/api/players/${playerId}`, {
+const isAdmin = () => {
+  let is_admin = isAdminEl.innerHTML;
+
+  if (is_admin === 'true') {
+    is_admin = true;
+  } else {
+    is_admin = false;
+  } 
+  console.log("Admin: " + is_admin)
+  return is_admin;
+}
+
+const booleanCheck = (value) => {
+  if (value === 'true') {
+    return true;
+  } else {
+    return false;
+  }
+}
+
+const editUser = async (userId, updateUser) => {
+  console.log(updateUser)
+  await fetch(`/api/users/${userId}`, {
     method: 'PUT',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(updatePlayer),
+    body: JSON.stringify(updateUser),
   });
 };
 
-const savePlayer = async (player) => {
-  console.log(player)
-  if(!isAdmin()) {
-    let name =  teamNameEl.innerHTML;
-    const team = await fetch(`/api/teams/${name}`, {
-      method: 'GET',
-      headers: { 'Content-Type': 'application/json' },
-    });
-    const teamId = await team.json();
-    player.team_id = parseInt(teamId.id);
-  } else {
-    player.team_id = teamNameEl.value;
-  }
+const saveUser = async (user) => {
+  console.log(user)
 
-  console.log(player)
-
-
-  await fetch('/api/players', {
+  await fetch('/api/users', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify(player),
+    body: JSON.stringify(user),
   });
-  renderPlayerList();
+  renderUserList();
 };
 
-const deletePlayer = (id) => {
-  return fetch(`/api/players/${id}`, {
+const deleteUser = (id) => {
+  return fetch(`/api/users/${id}`, {
     method: 'DELETE',
     headers: {
       'Content-Type': 'application/json',
@@ -100,118 +105,84 @@ const deletePlayer = (id) => {
   });
 };
 
-const renderActivePlayer = async (playerId) => {
-   
-    hide(savePlayerBtn);
-   
-    if (playerId) {
-        const playerData = await fetch(`/api/players/${playerId}`, {
+const renderActiveUser = async (userId) => {
+    hide(saveUserBtn);
+    
+    if (userId) {
+        const userData = await fetch(`/api/users/${userId}`, {
         method: 'GET',
         headers: { 'Content-Type': 'application/json' },
       });
-      const player = await playerData.json();
-      activePlayer = player;
-      console.log(activePlayer.team_id)
 
-      let positionId = '';
-      switch (activePlayer.position_id) {
-        case 1:
-          positionId = "1"
-          break;
-        case 2:
-          positionId = "2"
-          break;
-      } 
-      
-      playerFirstName.value = activePlayer.first_name;
-      playerLastName.value = activePlayer.last_name;
-      playerNumber.value = parseInt(activePlayer.player_number);
-      playerScores.value = parseInt(activePlayer.player_scores);
-      playerFouls.value = parseInt(activePlayer.player_fouls);
-      playerPosition.value = parseInt(positionId);
-      if (isAdmin()) {
-        playerTeam.value = parseInt(activePlayer.team_id);
-      }
+      const user = await userData.json();
+      activeUser = user;
+    
+      console.log(activeUser.team.team_name)
+      idEl.value = activeUser.id;
+      usernameEl.value = activeUser.username;
+      emailEl.value = activeUser.email;
+      passwordEl.setAttribute('type', 'password')
+      passwordEl.value = activeUser.password;
+      adminEl.value = activeUser.is_admin;
+      teamNameEl.value = activeUser.team.team_name;
     } else {
-      playerFirstName.removeAttribute('readonly');
-      playerLastName.removeAttribute('readonly');
-      playerNumber.removeAttribute('readonly');
-      playerScores.removeAttribute('readonly');
-      playerFouls.removeAttribute('readonly');
-      playerPosition.removeAttribute('disabled');
-      playerFirstName.value = '';
-      playerLastName.value = '';
-      playerNumber.value = '';
-      playerScores.value = '';
-      playerFouls.value = '';
-      playerPosition.value = '1';
+      idEl.value = '';
+      idEl.setAttribute('readonly', true);
+      usernameEl.value = '';
+      emailEl.value = '';
+      passwordEl.value = '';
+      adminEl.value = '';
+      adminEl.setAttribute('placeholder', 'true/false');
+      teamNameEl.value = '';
     }
   };
-const handlePlayerEdit = async () => {
-  let playerId = activePlayer.id;
-  let teamId;
-  
-  console.log(isAdmin())
-  if(isAdmin()) {
-  
-    teamId = playerTeam.value;
-  } else {
-    let name =  teamNameEl.innerHTML;
-    const team = await fetch(`/api/teams/${name}`, {
-      method: 'GET',
-      headers: { 'Content-Type': 'application/json' },
-    });
-    teamId = await team.json();
-    teamId = parseInt(teamId.id);  
-  }
+const handleUserEdit = async () => {
+  let userId = activeUser.id;
+  let admin = booleanCheck(adminEl.value);
 
-
-
-  const updatePlayer = {
-    first_name: playerFirstName.value,
-    last_name: playerLastName.value,
-    player_number: parseInt(playerNumber.value),
-    player_scores: parseInt(playerScores.value),
-    player_fouls: parseInt(playerFouls.value),
-    position_id: parseInt(playerPosition.value),
-    team_id: parseInt(teamId),
+  const updateUser = {
+    username: usernameEl.value,
+    email: emailEl.value,
+    password: passwordEl.value,
+    is_admin: admin,
+    team_name: teamNameEl.value,
   };
 
-  await editPlayer(playerId, updatePlayer);
+  await editUser(userId, updateUser);
   location.reload();
 }
 
-const handlePlayerSave = async () => {
-    const newPlayer = {
-        first_name: playerFirstName.value,
-        last_name: playerLastName.value,
-        player_number: parseInt(playerNumber.value),
-        player_scores: parseInt(playerScores.value),
-        player_fouls: parseInt(playerFouls.value),
-        position_id: parseInt(playerPosition.value),
+const handleUserSave = async () => {
+    let admin = booleanCheck(adminEl.value);
+    const newUser = {
+      username: usernameEl.value,
+      email: emailEl.value,
+      password: passwordEl.value,
+      is_admin: admin,
+      team_name: teamNameEl.value,
       };
-    console.log(newPlayer)
+    console.log(newUser)
     
-    await savePlayer(newPlayer);
+    await saveUser(newUser);
     location.reload();
   };
 
-const handlePlayerDelete = async (e, playerId) => {
+const handleUserDelete = async (e, userId) => {
     e.stopPropagation();
     console.log("DELETE!")
-    if (activePlayer.id === playerId) {
-      activePlayer = {};
+    if (activeUser.id === userId) {
+      activeUser = {};
     }
     modal.style.display = "block";
 
     modalBtn.addEventListener('click', async () => {
       modal.style.display = "none";
       try {
-        const delResponse = await deletePlayer(playerId);
+        const delResponse = await deleteUser(userId);
         if (delResponse.ok) {
           console.log("DELETED!!!!!!!!")
-          getAndRenderPlayers();
-          renderActivePlayer();
+          getAndRenderUsers();
+          renderActiveUser();
           location.reload();
         }
       } catch (error) {
@@ -220,72 +191,73 @@ const handlePlayerDelete = async (e, playerId) => {
     });       
 };
 
-const handlePlayerView = async (e, playerId) => {
-    newPlayerMode = false;
+const handleUserView = async (e, userId) => {
+    newUserMode = false;
     saveMode = true;
-    show(editPlayerButton)
+    show(editUserButton)
     e.preventDefault();
-    console.log("VIEW!")
-    renderActivePlayer(playerId);
+    console.log(userId)
+    renderActiveUser(userId);
 };
 
-const handleNewPlayerView = (e) => {
-    newPlayerMode = true;
-    svaeMode = false;
-    hide(editPlayerButton);
-    activePlayer = {};
-    renderActivePlayer();
+const handleNewUserView = (e) => {
+    newUserMode = true;
+    saveMode = false;
+    hide(editUserButton);
+    activeUser = {};
+    renderActiveUser();
 };
 
 const handleRenderSaveBtn = () => {
-    if (!playerFirstName.value.trim() || !playerLastName.value.trim() || !playerNumber.value.trim() || !playerScores.value.trim() || !playerFouls.value.trim()) {
-      hide(savePlayerBtn);
+    if (!usernameEl.value.trim() || !emailEl.value.trim() || !adminEl.value.trim() || !teamNameEl.value.trim()) {
+      hide(saveUserBtn);
     } else {
-      if (newPlayerMode === true) {
-      show(savePlayerBtn);
+      if (newUserMode === true) {
+      show(saveUserBtn);
       } else {
-        hide(savePlayerBtn);
+        hide(saveUserBtn);
       }
     }
 };
 
-const renderPlayerList = async () => {
+const renderUserList = async () => {
   
-    const viewButtons = document.querySelectorAll('.view-player');
+    const viewButtons = document.querySelectorAll('.view-user');
     viewButtons.forEach((button) => {
-
-      const playerId = button.getAttribute('data-view');
-      button.addEventListener('click', (e) => handlePlayerView(e, playerId));
+      const userId = button.getAttribute('data-view');
+      button.addEventListener('click', (e) => handleUserView(e, userId));
     });
 
-    const deleteButtons = document.querySelectorAll('.delete-player');
+    const deleteButtons = document.querySelectorAll('.delete-user');
     deleteButtons.forEach((button) => {
-      const playerId = button.getAttribute('data-delete');
+      const userId = button.getAttribute('data-delete');
 
-      button.addEventListener('click', (e) => handlePlayerDelete(e, playerId));
+      button.addEventListener('click', (e) => handleUserDelete(e, userId));
     });
 };
 
 
-const getAndRenderPlayers = async () => {
-  hide(editPlayerButton)
+const getAndRenderUsers = async () => {
+  hide(editUserButton)
   if (!saveMode) {
     handleRenderSaveBtn();
   }
-  getPlayers();
-  await renderPlayerList();
+  getUsers();
+  handleNewUserView()
+  await renderUserList();
 }
 
 
-if (window.location.pathname === '/') {
-    editPlayerButton.addEventListener('click', handlePlayerEdit);
-    savePlayerBtn.addEventListener('click', handlePlayerSave);
-    newPlayerBtn.addEventListener('click', handleNewPlayerView);
-    playerFirstName.addEventListener('keyup', handleRenderSaveBtn);
-    playerLastName.addEventListener('keyup', handleRenderSaveBtn);
-    playerNumber.addEventListener('keyup', handleRenderSaveBtn);
-    playerScores.addEventListener('keyup', handleRenderSaveBtn);
-    playerFouls.addEventListener('keyup', handleRenderSaveBtn);
+if (window.location.pathname === '/admin') {
+    editUserButton.addEventListener('click', handleUserEdit);
+    saveUserBtn.addEventListener('click', handleUserSave);
+    newUserBtn.addEventListener('click', handleNewUserView);
+    idEl.addEventListener('keyup', handleRenderSaveBtn);
+    usernameEl.addEventListener('keyup', handleRenderSaveBtn);
+    emailEl.addEventListener('keyup', handleRenderSaveBtn);
+    passwordEl.addEventListener('keyup', handleRenderSaveBtn);
+    adminEl.addEventListener('keyup', handleRenderSaveBtn);
+    teamNameEl.addEventListener('keyup', handleRenderSaveBtn);
 }
 
 const modalBtn = document.getElementById("modal-close");
@@ -306,18 +278,10 @@ span.onclick = function() {
   location.reload();
 }
 
-const isAdmin = () => {
-  let is_admin = isAdminEl.innerHTML;
 
-  if (is_admin === 'true') {
-    is_admin = true;
-  } else {
-    is_admin = false;
-  } 
 
-  console.log("Admin: " + is_admin)
-  return is_admin;
-}
 
 let saveMode = true;
-getAndRenderPlayers();
+getAndRenderUsers();
+
+// });

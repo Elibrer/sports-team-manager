@@ -14,7 +14,7 @@ const teamData = [
     user_id: 3,
   },
   {
-    team_name: 'Miranada Bombers',
+    team_name: 'Miranda Bombers',
     user_id: 4,
    }
 ];
