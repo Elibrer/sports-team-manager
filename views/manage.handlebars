@@ -1,5 +1,5 @@
 <div class="mt-1 text-center bg-dark">
-      <a class="text-light p-3">Player Management for {{team_name}}</a>
+      <a class="text-light p-3">Player Management for <span id="team-name">{{team_name}}</span></a>
       <div class="icons">
         <i class="fas fa-save text-light save-player"></i>
         <i class="fas fa-plus text-light new-player"></i>
@@ -9,45 +9,54 @@
       <div class="row">
         <div class="col-4 list-container">
           <div class="card">
-             {{#each players as |player|}}
-        <div>
-          <h3>{{player.first_name}} {{player.last_name}}</h3>
-          <p>Number: {{player.number}}</p>
-          <p>Scores: {{player.scores}}</p>
-          <p>Fouls: {{player.fouls}}</p>
-          <div class="icons">
-            <i class="fas fa-edit edit-player" data-id="{{player.id}}"></i>
-            <i class="fas fa-trash-alt delete-player" data-id="{{player.id}}"></i>
-          </div>
-        </div>
-        {{/each}}
+            {{#each players as |player|}}
+              <div class="d-flex flex-row justify-content-between border border-dark">
+                <h3>{{player.first_name}} {{player.last_name}}</h3>
+               
+                <div class="d-flex flex-row">
+                  <h3 class="d-flex align-items-center">#{{player.player_number}}</h3>
+                  <div class="icons d-flex align-items-center ml-3">
+                  <i class="fas fa-edit edit-player p-2 fa-lg" data-edit="{{player.id}}"></i>
+                  <i class="fas fa-trash-alt delete-player fa-lg" data-delete="{{player.id}}"></i>
+                  </div>
+                </div>
+              </div>
+            {{/each}}
             <ul class="list-group"></ul>
           </div>
         </div>
 
         <div class="col-8">
           <div>
-            <label for="player-first-name">Player first name:</label>
+            <label for="player-first-name" style="width: 200px;">Player first name:</label>
             <input class="player-first-name" maxlength="28" type="text" id="player-first-name"/>
           </div>
           
           <div>
-            <label for="player-last-name">Player last name:</label>
+            <label for="player-last-name" style="width: 200px;">Player last name:</label>
             <input class="player-last-name" maxlength="28" type="text" id="player-last-name"/>
           </div>
 
           <div>
-            <label for="player-number">Player number:</label>
+            <label for="player-number" style="width: 200px;">Player number:</label>
             <input class="player-number" maxlength="28" type="text" id="player-number"/>
           </div>
 
           <div>
-            <label for="player-scores">No. of scores:</label>
-            <input class="player-scores" maxlength="100" type="number" id="player-scores"/>
+            <label for="player-scores" style="width: 200px;">No. of scores:</label>
+            <input class="player-scores" maxlength="100" type="text" id="player-scores"/>
           </div>
 
           <div>
-            <label for="player-fouls">Player fouls:</label>
+            <label for="player-position" style="width: 200px;">Position:</label>
+            <select name="player-position" id="player-position" style="width: 182px;">
+              <option value="Attacker">Attacker</option>
+              <option value="Defender">Defender</option>
+            </select>
+          </div>
+
+          <div>
+            <label for="player-fouls" style="width: 200px;">Player fouls:</label>
             <input class="player-fouls" maxlength="20" type="text" id="player-fouls"/>
           </div>
         </div>

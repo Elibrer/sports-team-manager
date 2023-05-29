@@ -2,10 +2,10 @@ const { Position } = require('../models');
 
 const teamPosition = [
   {
-    position_name: 'Attack',
+    position_name: 'Attacker',
   },
   {
-   position_name: 'Defence',
+   position_name: 'Defender',
   },
 
   ];

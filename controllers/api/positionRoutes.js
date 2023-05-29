@@ -1,9 +1,9 @@
 const router = require('express').Router();
-const { Team } = require('../../models');
+const { Position } = require('../../models');
 
 router.get('/', async (req, res) => {
     try {
-      const teams = await Team.findAll();
+      const teams = await Position.findAll();
       res.status(200).json(teams);
     } catch (err) {
       res.status(500).json(err);
@@ -12,13 +12,14 @@ router.get('/', async (req, res) => {
 
 router.get('/:name', async (req, res) => {
     try {
-        const team = await Team.findOne({
+        const team = await Position.findOne({
             where: {
-              team_name: req.params.name,
+              position_name: req.params.name,
             },
+            
           });
         if (!team) {
-            res.status(404).json({ message: 'Team not found' });
+            res.status(404).json({ message: 'Position not found' });
         }
         res.status(200).json(team);
 
