@@ -52,6 +52,28 @@ router.get('/', auth, async (req, res) => {
   }
 });
 
+router.get('/admin', async (req, res) => {
+  try {
+    const userData = await User.findAll({
+      order: [['username', 'ASC']],
+    });
+
+    const teamData = await Team.findAll();
+
+    res.render('admin', {
+      userData,
+      teamData,
+      logged_in: req.session.logged_in,
+      is_admin: req.session.is_admin,
+    });
+  } catch (err) {
+    res.status(500).json(err);
+  }
+});
+
+
+
+
 router.get('/login', (req, res) => {
   if (req.session.logged_in) {
     res.redirect('/');
