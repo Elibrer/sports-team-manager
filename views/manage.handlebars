@@ -62,3 +62,47 @@
         </div>
       </div>
     </div>
+
+      
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+<body>
+<canvas id="myChart" style="width:100%;max-width:700px"></canvas>
+
+<script>
+
+const xValues = [
+   {{#each players as |player|}}
+   "{{player.first_name}} {{player.last_name}}",
+   {{/each}}
+];
+const yValues = [{{#each players as |player|}}
+   {{player.player_scores}},
+   {{/each}}];
+
+const barColors = ["red", "green","blue","orange","brown"];
+
+new Chart("myChart", {
+  type: "bar",
+  data: {
+    labels: xValues,
+    datasets: [{
+      backgroundColor: barColors,
+      data: yValues
+    }]
+  },
+  options: {
+    legend: {display: false},
+    title: {
+      display: true,
+      text: "Goals scored by team players"
+    },
+    scales: {
+        yAxes: [{
+            ticks: {
+                beginAtZero: true
+            }
+        }]
+    }
+  }
+});
+</script>
