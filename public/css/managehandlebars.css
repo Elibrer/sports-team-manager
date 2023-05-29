@@ -1,0 +1,26 @@
+/* @import url('https://fonts.googleapis.com/css?family=Nunito+Sans'); */
+:root {
+  --blue: #19243c;
+  --white: #fff;
+  --green: #2ccf6d;
+}
+
+body {
+  
+  background: linear-gradient(45deg, #006837, #8CC63F)
+}
+
+.h1 {
+  font-weight: 500;
+}
+.nav {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -ms-flex-wrap: wrap;
+  flex-wrap: wrap;
+  padding-left: 0;
+  margin-bottom: 0;
+  list-style: none; }
+
+

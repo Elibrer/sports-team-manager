@@ -1,5 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+   <script src="/public/css/managehandlebars.css"></script>
+   <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+
+     <link rel="stylesheet" href="/css/managehandlebars.css" />
+
+<div class="nav">
 <div class="mt-1 text-center bg-dark">
       <a class="text-light p-3">Player Management for <span id="team-name">{{team_name}}</span></a>
+    </div>  
       <div class="icons">
         <i class="fas fa-edit text-light edit-player"></i>
         <i class="fas fa-save text-light save-player"></i>
@@ -87,16 +101,20 @@
             </div>
           {{/if}}
 
-          <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
-          <body>
-          <canvas id="myChart" style="width:100%;max-width:700px"></canvas>
-
-        </div>
-      </div>
-    </div>
+    
+          
+        <div class="container-fluid">
+      <div class="row">
+        <div class="col-5 list-container ">
+          <div class="card m-3">
 
       
-
+          <canvas class="justify-content-md-center" id="myChart" style="width:100%;max-width:500px"></canvas>
+          <canvas class="justify-content-md-center" id="myChart1" style="width:100%;max-width:500px"></canvas>
+         </div>
+        </div>
+      </div>
+  
 
 <script>
 
@@ -109,7 +127,21 @@ const yValues = [{{#each players as |player|}}
    {{player.player_scores}},
    {{/each}}];
 
-const barColors = ["red", "green","blue","orange","brown"];
+const barColors = ["#bf6770",
+"#7bb743",
+"#ae59c8",
+"#d4a236",
+"#6475c9",
+"#d1502a",
+"#4bafd0",
+"#d24157",
+"#59b683",
+"#d3498d",
+"#547a35",
+"#d390d0",
+"#a08946",
+"#99508c",
+"#c37245"];
 
 new Chart("myChart", {
   type: "bar",
@@ -124,7 +156,37 @@ new Chart("myChart", {
     legend: {display: false},
     title: {
       display: true,
-      text: "Goals scored by team players"
+      text: "Goals scored by each team player"
+    },
+    scales: {
+        yAxes: [{
+            ticks: {
+                beginAtZero: true
+            }
+        }]
+    }
+    
+  }
+});
+
+const yValues1 = [{{#each players as |player|}}
+   {{player.player_fouls}},
+   {{/each}}];
+
+new Chart("myChart1", {
+  type: "bar",
+  data: {
+    labels: xValues,
+    datasets: [{
+      backgroundColor: barColors,
+      data: yValues1
+    }]
+  },
+  options: {
+    legend: {display: false},
+    title: {
+      display: true,
+      text: "Fouls recieved by each team player"
     },
     scales: {
         yAxes: [{
@@ -135,4 +197,9 @@ new Chart("myChart", {
     }
   }
 });
+
 </script>
+</body>
+
+</html>
+
