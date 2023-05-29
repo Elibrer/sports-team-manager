@@ -16,27 +16,41 @@ router.get('/', async (req, res) => {
 // Get a single user by ID
 router.get('/:id', async (req, res) => {
   try {
+    if ( req.session.logged_in === true && req.session.is_admin === true) {
     const user = await User.findByPk(req.params.id, {
-      attributes: { exclude: ['password'] },
+      include: [{ model: Team, attributes: ['team_name'] }],
     });
 
     if (!user) {
       res.status(404).json({ message: 'User not found' });
     }
     res.status(200).json(user);
-  } catch (err) {
+  }} catch (err) {
     res.status(500).json(err);
   }
 });
 
 // Create a new user
 router.post('/', async (req, res) => {
+  console.log(req.body)
   try {
     const newUser = await User.create({
       username: req.body.username,
       email: req.body.email,
       password: req.body.password,
-    });
+      is_admin: req.body.is_admin,
+    }, {individualHooks: true});
+    
+    if (req.body.team_name) {
+      const newTeam = await Team.create({
+        team_name: req.body.team_name,
+        user_id: newUser.id,
+      });
+    }
+    console.log("HELLO")
+
+
+
     res.status(201).json(newUser);
   } catch (err) {
     res.status(500).json(err);
@@ -57,7 +71,9 @@ router.put('/:id', async (req, res) => {
         where: {
           id: req.params.id,
         },
-      });
+        individualHooks: true
+      }
+      );
     if (!updatedUser[0]) {
       res.status(404).json({ message: 'User not found' });
     }

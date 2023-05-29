@@ -66,42 +66,14 @@ const editPlayer = async (playerId, updatePlayer) => {
   });
 };
 
-const isAdmin = () => {
-  let is_admin = isAdminEl.innerHTML;
-
-  if (is_admin === 'true') {
-    is_admin = true;
-  } else {
-    is_admin = false;
-  }
-
-  console.log("Admin: " + is_admin)
-  return is_admin;
-}
-
-const savePlayer = async (player) => {
-  console.log(player)
-  if (!isAdmin()) {
-    let name = teamNameEl.innerHTML;
-    const team = await fetch(`/api/teams/${name}`, {
-      method: 'GET',
-      headers: { 'Content-Type': 'application/json' },
-    });
-    const teamId = await team.json();
-    player.team_id = parseInt(teamId.id);
-  } else {
-    player.team_id = teamNameEl.value;
-  }
-
-  console.log(player)
-
-
+const savePlayer = async (newPlayer) => {
+  console.log(newPlayer)
   await fetch('/api/players', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify(player),
+    body: JSON.stringify(newPlayer),
   });
   renderPlayerList();
 };
@@ -197,18 +169,30 @@ const handlePlayerEdit = async () => {
 }
 
 const handlePlayerSave = async () => {
-  const newPlayer = {
-    first_name: playerFirstName.value,
-    last_name: playerLastName.value,
-    player_number: parseInt(playerNumber.value),
-    player_scores: parseInt(playerScores.value),
-    player_fouls: parseInt(playerFouls.value),
-    position_id: parseInt(playerPosition.value),
-  };
-  console.log(newPlayer)
+    const newPlayer = {
+        first_name: playerFirstName.value,
+        last_name: playerLastName.value,
+        player_number: parseInt(playerNumber.value),
+        player_scores: parseInt(playerScores.value),
+        player_fouls: parseInt(playerFouls.value),
+        position_id: parseInt(playerPosition.value),
+      };
 
-  await savePlayer(newPlayer);
-  location.reload();
+      if(!isAdmin()) {
+        let name =  teamNameEl.innerHTML;
+        const team = await fetch(`/api/teams/${name}`, {
+          method: 'GET',
+          headers: { 'Content-Type': 'application/json' },
+        });
+        const teamId = await team.json();
+        newPlayer.team_id = parseInt(teamId.id);
+      } else {
+        console.log(playerTeam.value)
+        newPlayer.team_id = parseInt(playerTeam.value);
+      }
+
+    await savePlayer(newPlayer);
+    location.reload();
 };
 
 const handlePlayerDelete = async (e, playerId) => {
@@ -288,6 +272,7 @@ const getAndRenderPlayers = async () => {
     handleRenderSaveBtn();
   }
   getPlayers();
+  handleNewPlayerView()
   await renderPlayerList();
 }
 
