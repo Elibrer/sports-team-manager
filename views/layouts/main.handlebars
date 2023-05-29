@@ -26,6 +26,7 @@
       <nav class=" d-flex justify-content-end">
         {{#if is_admin}}
         <a href="/admin" class="btn btn-secondary">Admin</a>
+        <a href="/" class="btn btn-info">Home</a>
         {{/if}}
         <button class="btn btn-danger" id="logout">Logout</button>
       </nav>
@@ -35,7 +36,7 @@
 
   <div class="content-video">
 
-    <video class="video" poster="/immagine.jpg" autoplay loop muted>
+    <video class="video" autoplay loop muted>
       <source src="/video/Project-2-video.mp4" type="video/mp4">
     </video>
 
@@ -58,7 +59,6 @@
   {{#if logged_in}}
   <script src="/js/logout.js"></script>
   {{/if}}
-  <script src="/js/manage.js"></script>
 </body>
 
 </html>
