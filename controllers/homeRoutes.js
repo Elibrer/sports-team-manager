@@ -1,22 +1,48 @@
 const router = require('express').Router();
-const { User } = require('../models');
+const { User, Player, Team } = require('../models');
 const auth = require('../utils/auth');
+
 
 router.get('/', auth, async (req, res) => {
   try {
+
     if (req.session.logged_in) {
     const userData = await User.findAll({
       attributes: { exclude: ['password'] },
       order: [['username', 'ASC']],
     });
 
-    const users = userData.map((project) => project.get({ plain: true }));
+    const teamData = await Team.findAll();
 
+    let playerData = [];
+    if (req.session.is_admin) {
+      playerData = await Player.findAll({
+        include: {
+            model: Team,
+            attributes: ['team_name'], 
+        },   
+        order: [['player_number', 'ASC']],
+      });
+    } else {
+      playerData = await Player.findAll({
+        where: { team_id: req.session.team_id },
+        order: [['player_number', 'ASC']],
+      });
+    }
+
+    const players = playerData.map((project) => project.get({ plain: true }));
+    const users = userData.map((project) => project.get({ plain: true }));
+    const teams = teamData.map((project) => project.get({ plain: true }));
+    // module.exports = is_admin;
     res.render('manage', {
       users,
+      players,
+      teams,
+      team_name: req.session.team_name,
       logged_in: req.session.logged_in,
       is_admin: req.session.is_admin,
     });
+
   }
   else {
     res.redirect('/login');

@@ -38,11 +38,11 @@ Player.init(
       type: DataTypes.INTEGER,
       allowNull: false,
     },
-    scores: {
+    player_scores: {
       type: DataTypes.INTEGER,
       allowNull: true,
     },
-    fouls: {
+    player_fouls: {
       type: DataTypes.INTEGER,
       allowNull: true,
     },
@@ -66,7 +66,7 @@ Player.init(
     timestamps: false,
     underscored: true,
     modelName: 'player',
-    tableName: 'Player',
+    tableName: 'player',
   }
 );
 

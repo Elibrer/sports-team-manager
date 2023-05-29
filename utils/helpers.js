@@ -7,4 +7,7 @@ module.exports = {
       new Date(date).getFullYear() + 5
     }`;
   },
+  parseInt: (val) => {
+    return parseInt(val);
+  },
 };
