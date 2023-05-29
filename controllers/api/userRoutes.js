@@ -47,9 +47,11 @@ router.post('/', async (req, res) => {
 router.put('/:id', async (req, res) => {
   try {
     const updatedUser = await User.update({
+      id: req.body.id,
       username: req.body.username,
       email: req.body.email,
       password: req.body.password,
+      is_admin: req.body.is_admin,
     },
       {
         where: {
@@ -92,12 +94,20 @@ router.post('/login', async (req, res) => {
         email: req.body.email
       },
     });
+    let team = {};
 
-    const team = await Team.findOne({
-      where: {
-        id: dbUserData.id,
-      },
-    });
+    if (!dbUserData.is_admin) {
+      team = await Team.findOne({
+        where: {
+          id: dbUserData.id,
+        },
+      });
+    } else {
+      team = {
+        team_name: 'Admin',
+        id: 0,
+      }
+    }
 
     if (!dbUserData) {
       res
