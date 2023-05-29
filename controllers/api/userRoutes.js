@@ -32,6 +32,8 @@ router.get('/:id', async (req, res) => {
 
 // Create a new user
 router.post('/', async (req, res) => {
+  console.log("HELLO")
+
   console.log(req.body)
   try {
     const newUser = await User.create({
@@ -40,7 +42,6 @@ router.post('/', async (req, res) => {
       password: req.body.password,
       is_admin: req.body.is_admin,
     }, {individualHooks: true});
-    
     if (req.body.team_name) {
       const newTeam = await Team.create({
         team_name: req.body.team_name,

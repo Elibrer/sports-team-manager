@@ -36,6 +36,18 @@ if (window.location.pathname === '/') {
   teamNameEl = document.querySelector('#team-name');
 }
 
+const isAdmin = () => {
+  let is_admin = isAdminEl.innerHTML;
+
+  if (is_admin === 'true') {
+    is_admin = true;
+  } else {
+    is_admin = false;
+  } 
+
+  console.log("Admin: " + is_admin)
+  return is_admin;
+}
 
 // Show an element
 const show = (elem) => {
