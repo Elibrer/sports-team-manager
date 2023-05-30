@@ -12,10 +12,10 @@
 ## Table of Contents
 - [Description](#project-description)
 - [Links](#links)
+- [Login](#login)
 - [Usage](#usage)
-- [Application Preview](#full-preview)
 - [Credits](#credits)
-- [Tests](#tests)
+- [Documents](#documentation)
 - [Questions](#questions)
 
 
@@ -26,6 +26,26 @@ We saw the opportunity to create a Sports Team Manager application for sporting 
 ## Links
 
 Have a look at our live page at [live page](https://sports-team-manager.herokuapp.com/) And here you can find the code for this project: [GitHub](https://github.com/Elibrer/sports-team-manager)
+
+## Login
+
+Detailed here is the login information for the pre-seeded users/teams within the database, as well as the `admin` account to add new users, or update/delete existing users.
+
+>Email: `admin@admin.com`
+Password: `admin12345`
+
+>Email: `randwick@stm.com`
+Password: `randwick123`
+
+>Email: `miranda@stm.com`
+Password: `miranda123`
+
+>Email: `macpark@stm.com`
+Password: `macpark123`
+
+>Email: `westsyd@stm.com`
+Password: `westsyd123`
+
 
 ## Usage
 
@@ -54,6 +74,10 @@ Jasmine Neal- [Jasmine's Github](https://github.com/Jvn101)
 
 Frameworks used: Bootstrap v3.4.1 [Bootstrap Webpage](https://getbootstrap.com/docs/4.0/getting-started/introduction/) <br />
 Chart.js v4.0.0 [Chart.js Webpage](https://www.chartjs.org/docs/latest/)
+
+## Documentation
+
+View our pitch and presentation slides [here!](https://docs.google.com/presentation/d/1PaUtNn8GOfefQ8JSZr_-gWXrXOWY5G1_7JCqHvANKN0/edit?usp=sharing)
 
 ## Questions
 
