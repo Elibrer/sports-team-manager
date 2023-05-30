@@ -14,17 +14,13 @@ Have a look at our live page at [live page](ADD-HEROKU-LINK) And here you can fi
 Open the page and you can find the login page. Each team has their own unique email and password. Once logged in key player data can be viewed on the screen.
 Click logout to end the user session.
 
-![Opening of the page.](ADD-SCREENSHOT-OF-HOMEPAGE)
+![Opening of the page.](/Images/login.png)
 
 When you open the application page you will be presented with the login page above.
 
-![Team results.](.ADD-MANAGE-PAGE-SCREENSHOT)
+![Team results.](/Images/Player-home.png)
 
-Select the add and delete buttons to add new players or remove current ones. Click on the eye symbol (UPDATE THIS TERMINOLOGY DEPENDING ON CSS STYLING) to view player details and update player information (IS THIS CORRECT?).
-
-![Admin results.](./assets/images/README-3.png)
-
-Upon login admin users have access to player and team data as above.
+Select the add and delete buttons to add new players or remove current ones. Click on the view button to see player details and update player information. Upon login admin users also have access to the above data in addition to adding and deleting teams.
 
 ## Credits
 
