@@ -11,4 +11,10 @@ const logout = async () => {
   }
 };
 
+const home = () => {
+  document.location.replace('/');
+};
+
+document.querySelector('#homeButton').addEventListener('click', home);
+
 document.querySelector('#logout').addEventListener('click', logout);

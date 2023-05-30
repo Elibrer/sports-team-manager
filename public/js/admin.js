@@ -245,7 +245,6 @@ const getAndRenderUsers = async () => {
   await renderUserList();
 }
 
-
 if (window.location.pathname === '/admin') {
     editUserButton.addEventListener('click', handleUserEdit);
     saveUserBtn.addEventListener('click', handleUserSave);
@@ -275,9 +274,6 @@ span.onclick = function() {
   modal.style.display = "none";
   location.reload();
 }
-
-
-
 
 let saveMode = true;
 getAndRenderUsers();
