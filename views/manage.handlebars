@@ -165,7 +165,7 @@
     ];
     const yValues = [
       {{#each players as |player|}}
-      {{player.player_number}},
+      {{player.player_scores}},
       {{/each}}
     ];
 
@@ -182,7 +182,7 @@
         legend: { display: false },
         title: {
           display: true,
-          text: "Player Numbers"
+          text: "Goals Scored by Players"
         }
       }
     });
@@ -194,12 +194,12 @@
     ];
     const yValues1 = [
       {{#each players as |player|}}
-      {{player.player_sixes}},
+      {{player.player_fouls}},
       {{/each}}
     ];
 
     new Chart("myChart1", {
-      type: "line",
+      type: "bar",
       data: {
         labels: xValues1,
         datasets: [{
@@ -213,7 +213,7 @@
         legend: { display: false },
         title: {
           display: true,
-          text: "Player Sixes"
+          text: "Fouls Received by Players"
         }
       }
     });
