@@ -14,7 +14,6 @@
 - [Links](#links)
 - [Login](#login)
 - [Usage](#usage)
-- [Application Preview](#full-preview)
 - [Credits](#credits)
 - [Documents](#documentation)
 - [Questions](#questions)
