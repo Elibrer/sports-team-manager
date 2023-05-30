@@ -1,7 +1,7 @@
-const User = require('/app/models/User');
-const Position = require('/app/models/Position');
-const Player = require('/app/models/Player');
-const Team = require('/app/models/Team')
+const User = require('./User');
+const Position = require('./Position');
+const Player = require('./Player');
+const Team = require('./Team')
 
 Position.hasMany(Player, {
     foreignKey: 'position_id',

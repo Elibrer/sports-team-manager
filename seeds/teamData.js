@@ -1,4 +1,4 @@
-const { Team } = require('/app/models');
+const { Team } = require('../models');
 
 const teamData = [
   {

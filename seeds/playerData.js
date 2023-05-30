@@ -1,4 +1,4 @@
-const { Player } = require('/app/models');
+const { Player } = require('../models');
 
 const playerData = [
   {

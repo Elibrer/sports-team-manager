@@ -1,4 +1,4 @@
-const { Position } = require('/app/models');
+const { Position } = require('../models');
 
 const teamPosition = [
   {
