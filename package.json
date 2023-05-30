@@ -24,6 +24,7 @@
         "handlebars": "^4.7.7",
         "mysql2": "^2.2.1",
         "sequelize": "^6.31.1",
-        "chart.js": "^4.0.0"
+        "chart.js": "^4.0.0",
+        "seed": "node seeds/seed.js"
     }
 }

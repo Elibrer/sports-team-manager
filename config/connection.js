@@ -9,11 +9,11 @@ if (process.env.JAWSDB_URL) {
   sequelize = new Sequelize(
     process.env.DB_NAME,
     process.env.DB_USER,
-    process.env.DB_PASSWORD,
+    process.env.DB_PW,
     {
         //Host is set to 127.0.0.1 because 'localhost' doesn't work on my laptop for whatever reason.
         //127.0.0.1 will work the exact same, as it is the localhost ip address anyway. - Eli
-      host: 'localhost',
+      host: 'locahost',
       dialect: 'mysql',
       port: 3306
     }
