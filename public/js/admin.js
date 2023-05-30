@@ -1,5 +1,3 @@
-// document.addEventListener('DOMContentLoaded', function() {
-
 let idEl;
 let usernameEl;
 let emailEl;
@@ -283,5 +281,3 @@ span.onclick = function() {
 
 let saveMode = true;
 getAndRenderUsers();
-
-// });
