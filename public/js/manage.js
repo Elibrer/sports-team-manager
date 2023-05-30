@@ -151,6 +151,10 @@ const handlePlayerEdit = async () => {
   let teamId;
 
   console.log(isAdmin())
+  if (!isPlayerChanged) {
+    // No changes were made, return from the function
+    return;
+  }
   if (isAdmin()) {
 
     teamId = playerTeam.value;
@@ -248,17 +252,46 @@ const handleNewPlayerView = (e) => {
   renderActivePlayer();
 };
 
+let isPlayerChanged = false;
+
+const handlePlayerInputChange = () => {
+  isPlayerChanged = true;
+  handleRenderSaveBtn();
+};
+
+playerFirstName.addEventListener('input', handlePlayerInputChange);
+playerLastName.addEventListener('input', handlePlayerInputChange);
+playerNumber.addEventListener('input', handlePlayerInputChange);
+playerScores.addEventListener('input', handlePlayerInputChange);
+playerFouls.addEventListener('input', handlePlayerInputChange);
+
 const handleRenderSaveBtn = () => {
-  if (!playerFirstName.value.trim() || !playerLastName.value.trim() || !playerNumber.value.trim() || !playerScores.value.trim() || !playerFouls.value.trim()) {
+  const isPlayerEmpty =
+    !playerFirstName.value.trim() ||
+    !playerLastName.value.trim() ||
+    !playerNumber.value.trim() ||
+    !playerScores.value.trim() ||
+    !playerFouls.value.trim();
+
+  if (isPlayerEmpty || (Object.keys(activePlayer).length === 0 && newPlayerMode === false)) {
     hide(savePlayerBtn);
+    hide(editPlayerButton);
   } else {
     if (newPlayerMode === true) {
       show(savePlayerBtn);
+      hide(editPlayerButton);
     } else {
+      if (isPlayerChanged) {
+        show(editPlayerButton);
+      } else {
+        hide(editPlayerButton);
+      }
       hide(savePlayerBtn);
     }
   }
 };
+
+editPlayerButton.addEventListener('click', handlePlayerEdit);
 
 const renderPlayerList = async () => {
 
